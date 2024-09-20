@@ -75,11 +75,16 @@ for i in range(k):
 
     #catch
     temp = []
-    cand = [a + b for a, b in zip(catcher, tickmove[way][idx])]
-    cnt = 0
-    while check(cand, n):
-        temp.append(cand)
+    cand = catcher
+    temp.append(cand)
+
+    for i in range(2):
         cand = [a + b for a, b in zip(cand, tickmove[way][idx])]
+        if check(cand, n):
+            temp.append(cand)
+        else:
+            break
+    cnt = 0
     for j in range(len(runner)-1, -1, -1):
         if runner[j][0] in temp and runner[j][0] not in tree:
             runner.pop(j)
