@@ -78,17 +78,19 @@ for i in range(k):
     cand = catcher
     temp.append(cand)
 
-    for i in range(2):
+    for _ in range(2):
         cand = [a + b for a, b in zip(cand, tickmove[way][idx])]
         if check(cand, n):
             temp.append(cand)
         else:
             break
     cnt = 0
+    # print(catcher, runner, temp)
     for j in range(len(runner)-1, -1, -1):
         if runner[j][0] in temp and runner[j][0] not in tree:
             runner.pop(j)
             cnt += 1
+    # print(i+1, cnt)
     answer += (i+1) * cnt
 
 print(answer)
