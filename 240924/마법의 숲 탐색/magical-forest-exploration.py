@@ -102,6 +102,7 @@ for v, i in enumerate(range(k)):
         tempx , tempy = (x + dx, y + dy)
         if not (0 <= x + dx < r and 0 <= y + dy < c):
             graph = [[0 for _ in range(c)] for _ in range(r)]
+            exits = []
             test = False
             break
         if idx == di:
@@ -122,5 +123,6 @@ for v, i in enumerate(range(k)):
             # answer += max(values)
     # print(values)
     # print(answer)
+    # print(exits)
 
 print(answer)
