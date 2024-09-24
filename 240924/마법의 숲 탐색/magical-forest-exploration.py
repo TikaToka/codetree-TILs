@@ -1,11 +1,11 @@
-def dfs(graph, start, exits):
+def bfs(graph, start, exits):
     tovisit = []
     visited = set()
     row = 0
     tovisit.append(start)
     iterate = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     while tovisit:
-        node = tovisit.pop()
+        node = tovisit.pop(0)
         visited.add((node[0], node[1]))
         row = max(row, node[0])
         if row == len(graph):
