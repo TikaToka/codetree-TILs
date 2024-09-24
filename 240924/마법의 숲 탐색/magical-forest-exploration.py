@@ -1,12 +1,12 @@
-def dfs(graph, start):
+def dfs(graph, start, exits):
     tovisit = []
-    visited = []
+    visited = set()
     row = 0
     tovisit.append(start)
     iterate = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     while tovisit:
-        node= tovisit.pop()
-        visited.append(node)
+        node = tovisit.pop()
+        visited.add((node[0], node[1]))
         row = max(row, node[0])
         if row == len(graph):
             return row
@@ -14,8 +14,14 @@ def dfs(graph, start):
             tempx, tempy = node[0] + dx, node[1] + dy
             if not (0 <= tempx < r and 0 <= tempy < c):
                 continue
-            if graph[tempx][tempy] != 0 and [tempx, tempy] not in visited:
-                tovisit.append([tempx, tempy])
+            if node in exits:
+                if graph[tempx][tempy] != graph[node[0]][node[1]] and  graph[tempx][tempy] != 0 and (tempx, tempy) not in visited:
+                    tovisit.append([tempx, tempy])
+                elif graph[tempx][tempy] == graph[node[0]][node[1]] and (tempx, tempy) not in visited:
+                    tovisit.append([tempx, tempy])
+            else:
+                if graph[tempx][tempy] == graph[node[0]][node[1]] and (tempx, tempy) not in visited:
+                    tovisit.append([tempx, tempy])
     return row + 1
 
 def check(curr, look, graph):
@@ -45,7 +51,7 @@ for v, i in enumerate(range(k)):
     curr = [-2, ci-1]
     look = [1, 0]
     while True:
-        print(curr[0]+1, curr[1]+1, di)
+        # print(curr[0]+1, curr[1]+1, di)
         if curr[0] == r-2:
             break
         # S
@@ -100,20 +106,21 @@ for v, i in enumerate(range(k)):
             break
         if idx == di:
             exit = [tempx, tempy]
+            exits.append(exit)
         graph[tempx][tempy] = v+1
     if test:
-        values = []
-        for dx, dy in [[-1, 0], [0, 1], [1, 0], [0, -1]]:
-            tempx, tempy = (exit[0]+dx, exit[1]+dy)
-            if 0 <= tempx < r and 0 <= tempy < c:
-                if graph[tempx][tempy] not in [0, v+1]:
-                    values.append(dfs(graph, [exit[0], exit[1]]))
-        if not values:
-            answer += x + 1 + 1
-        else:   
-            answer += max(values)
-    print(values)
-    print(answer)
-    # print(graph)
+        answer += dfs(graph, exit, exits)
+        # values = []
+        # for dx, dy in [[-1, 0], [0, 1], [1, 0], [0, -1]]:
+        #     tempx, tempy = (exit[0]+dx, exit[1]+dy)
+        #     if 0 <= tempx < r and 0 <= tempy < c:
+        #         if graph[tempx][tempy] not in [0, v+1]:
+        #             values.append(dfs(graph, [exit[0], exit[1]], exits))
+        # if not values:
+        #     answer += x + 1 + 1
+        # else:   
+            # answer += max(values)
+    # print(values)
+    # print(answer)
 
 print(answer)
