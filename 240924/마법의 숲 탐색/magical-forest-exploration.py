@@ -39,6 +39,7 @@ def check(curr, look, graph):
 answer = 0
 r, c, k = map(int, input().split())
 graph = [[0 for _ in range(c)] for _ in range(r)]
+exits = []
 for v, i in enumerate(range(k)):
     ci, di = map(int, input().split())
     curr = [-2, ci-1]
@@ -54,7 +55,8 @@ for v, i in enumerate(range(k)):
         else: # W
             look = [0, -1]
             cand = [a + b for a, b in zip(curr, look)]
-            if check(cand, look, graph):# S
+            if check(cand, look, graph):
+                # S
                 look = [1, 0]
                 cand = [a + b for a, b in zip(cand, look)]
                 if check(cand, look, graph):
@@ -110,8 +112,8 @@ for v, i in enumerate(range(k)):
             answer += x + 1 + 1
         else:   
             answer += max(values)
-    # print(values)
-    # print(answer)
+    print(values)
+    print(answer)
     # print(graph)
 
 print(answer)
