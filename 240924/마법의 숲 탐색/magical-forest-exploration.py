@@ -1,11 +1,11 @@
-def bfs(graph, start, exits):
+def dfs(graph, start, exits):
     tovisit = []
     visited = set()
     row = 0
     tovisit.append(start)
     iterate = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     while tovisit:
-        node = tovisit.pop(0)
+        node = tovisit.pop()
         visited.add((node[0], node[1]))
         row = max(row, node[0])
         if row == len(graph):
@@ -14,7 +14,7 @@ def bfs(graph, start, exits):
             tempx, tempy = node[0] + dx, node[1] + dy
             if not (0 <= tempx < r and 0 <= tempy < c):
                 continue
-            if node in exits:
+            if (node[0], node[1]) in exits:
                 if graph[tempx][tempy] != graph[node[0]][node[1]] and  graph[tempx][tempy] != 0 and (tempx, tempy) not in visited:
                     tovisit.append([tempx, tempy])
                 elif graph[tempx][tempy] == graph[node[0]][node[1]] and (tempx, tempy) not in visited:
@@ -45,13 +45,12 @@ def check(curr, look, graph):
 answer = 0
 r, c, k = map(int, input().split())
 graph = [[0 for _ in range(c)] for _ in range(r)]
-exits = []
+exits = set()
 for v, i in enumerate(range(k)):
     ci, di = map(int, input().split())
     curr = [-2, ci-1]
     look = [1, 0]
     while True:
-        # print(curr[0]+1, curr[1]+1, di)
         if curr[0] == r-2:
             break
         # S
@@ -102,14 +101,14 @@ for v, i in enumerate(range(k)):
         tempx , tempy = (x + dx, y + dy)
         if not (0 <= x + dx < r and 0 <= y + dy < c):
             graph = [[0 for _ in range(c)] for _ in range(r)]
-            exits = []
+            exits = set()
             test = False
             break
         if idx == di:
             exit = [tempx, tempy]
-            exits.append(exit)
+            exits.add((exit[0], exit[1]))
         graph[tempx][tempy] = v+1
     if test:
-        answer += bfs(graph, exit, exits)
-       
+        answer += dfs(graph, exit, exits)
+
 print(answer)
