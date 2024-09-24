@@ -40,8 +40,8 @@ answer = 0
 r, c, k = map(int, input().split())
 graph = [[0 for _ in range(c)] for _ in range(r)]
 for v, i in enumerate(range(k)):
-    ci, di = map(int, input().split()) # 북 동 남 서
-    curr = [1-1, ci-1]
+    ci, di = map(int, input().split())
+    curr = [-1, ci-1]
     look = [1, 0]
     while True:
         # print(curr[0]+1, curr[1]+1, di)
@@ -112,5 +112,6 @@ for v, i in enumerate(range(k)):
             answer += max(values)
     # print(values)
     # print(answer)
+    # print(graph)
 
 print(answer)
