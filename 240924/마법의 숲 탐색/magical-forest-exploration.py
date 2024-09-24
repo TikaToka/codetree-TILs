@@ -44,7 +44,7 @@ for v, i in enumerate(range(k)):
     curr = [-2, ci-1]
     look = [1, 0]
     while True:
-        # print(curr[0]+1, curr[1]+1, di)
+        print(curr[0]+1, curr[1]+1, di)
         if curr[0] == r-2:
             break
         # S
