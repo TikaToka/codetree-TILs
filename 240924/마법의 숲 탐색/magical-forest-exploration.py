@@ -110,19 +110,6 @@ for v, i in enumerate(range(k)):
             exits.append(exit)
         graph[tempx][tempy] = v+1
     if test:
-        answer += dfs(graph, exit, exits)
-        # values = []
-        # for dx, dy in [[-1, 0], [0, 1], [1, 0], [0, -1]]:
-        #     tempx, tempy = (exit[0]+dx, exit[1]+dy)
-        #     if 0 <= tempx < r and 0 <= tempy < c:
-        #         if graph[tempx][tempy] not in [0, v+1]:
-        #             values.append(dfs(graph, [exit[0], exit[1]], exits))
-        # if not values:
-        #     answer += x + 1 + 1
-        # else:   
-            # answer += max(values)
-    # print(values)
-    # print(answer)
-    # print(exits)
-
+        answer += bfs(graph, exit, exits)
+       
 print(answer)
