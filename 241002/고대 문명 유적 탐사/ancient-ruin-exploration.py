@@ -43,27 +43,10 @@ def dfs(graph):
                         ny = y + dy[d]
                         if checkRange(nx, ny) and (nx, ny) not in visit and (nx, ny) not in visited and graph[nx][ny]==v:
                             tovisit.append((nx, ny))
-                visited.update(visit)
+                visited = visited.union(visit)
                 if len(visit) >= 3:
-                    visits.extend(visit)
+                    visits+=list(visit)
     return visits
-
-def dfs2(graph, start):
-    dx = (-1, 0, 1, 0)
-    dy = (0, 1, 0, -1)
-    tovisit = []
-    visited = set()
-    tovisit.append(start)
-    v = graph[start[0]][start[1]]
-    while tovisit:
-        x, y = tovisit.pop()
-        for d in range(4):
-            nx = x + dx[d]
-            ny = y + dx[d]
-            if checkRange(nx, ny) and (nx, ny) not in visited and graph[nx][ny]==v:
-                tovisit.append(start)
-    return visited
-
     
 
 k, m = map(int, input().split())
@@ -84,7 +67,7 @@ for i in range(k): # k
     maxrot = 4 # min
     maxq = 6 # min
     maxp = 6 # min
-    maxgraph = [row[:] for row in graph]
+    maxgraph = []
     for p in range(1, 4):
         for q in range(1, 4):
             tempgraph = [row[:] for row in graph]
@@ -121,36 +104,28 @@ for i in range(k): # k
                                 maxgraph = tempgraph
     if maxval == 0:
         break
-
-    # print(maxgraph)
-    # print(maxval)
-    # print(maxp, maxq)
-    # print(maxrot)
     answer += maxval
-    
+    if not maxarr:
+        continue
+    graph = maxgraph
+    # print(graph)
+    # print(maxp, maxq, maxrot)
     while True:
+        # print(answer)
         # refill
         maxarr = sorted(maxarr, key=lambda x: (x[1], -x[0]))
         # print(maxarr)
-        # print(rep)
         for x, y in maxarr:
             if rep:
-                maxgraph[x][y] = rep.popleft()
-        # print(maxgraph)
+                graph[x][y] = rep.popleft()
+        # print(graph)
         # check
-        tempvisited = set()
-        arrlist = []
-        for x, y in maxarr:
-            if (x, y) not in tempvisited:
-                arr = dfs2(maxgraph, (x, y))
-                tempvisited.update(arr)
-                if len(arr) >= 3:
-                    arrlist.extend(arr)
-        if not arrlist:
+        arr = dfs(graph)
+        if not arr:
             break
         else:
-            maxarr = arrlist
-            answer += len(arrlist)
+            maxarr = arr
+            answer += len(arr)
     if answer != 0:
         answers.append(str(answer))
 
