@@ -16,6 +16,9 @@ def rotate(graph, middle):
         for j in range(3):
             new_board[x-1+i][y-1+j] = rotated[i][j]
 
+    del sub_grid
+    del rotated
+
     return new_board
 
 
