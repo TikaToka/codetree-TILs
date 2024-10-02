@@ -16,9 +16,6 @@ def rotate(graph, middle):
         for j in range(3):
             new_board[x-1+i][y-1+j] = rotated[i][j]
 
-    del sub_grid
-    del rotated
-
     return new_board
 
 
@@ -26,7 +23,32 @@ def checkRange(x, y):
     return 0<= x < 5 and 0<= y <5
 
 
-def dfs(graph, start):
+def dfs(graph):
+    dx = (-1, 0, 1, 0)
+    dy = (0, 1, 0, -1)
+    visits = []
+    visited = set()
+    for i in range(5):
+        for j in range(5):
+            tovisit = []
+            if (i, j) not in visited:
+                visit = set()
+                tovisit.append((i, j))
+                v = graph[i][j]
+                while tovisit:
+                    x, y = tovisit.pop()
+                    visit.add((x, y))
+                    for d in range(4):
+                        nx = x + dx[d]
+                        ny = y + dy[d]
+                        if checkRange(nx, ny) and (nx, ny) not in visit and (nx, ny) not in visited and graph[nx][ny]==v:
+                            tovisit.append((nx, ny))
+                visited.update(visit)
+                if len(visit) >= 3:
+                    visits.extend(visit)
+    return visits
+
+def dfs2(graph, start):
     dx = (-1, 0, 1, 0)
     dy = (0, 1, 0, -1)
     tovisit = []
@@ -35,13 +57,13 @@ def dfs(graph, start):
     v = graph[start[0]][start[1]]
     while tovisit:
         x, y = tovisit.pop()
-        visited.add((x, y))
         for d in range(4):
             nx = x + dx[d]
-            ny = y + dy[d]
+            ny = y + dx[d]
             if checkRange(nx, ny) and (nx, ny) not in visited and graph[nx][ny]==v:
-                tovisit.append((nx, ny))
+                tovisit.append(start)
     return visited
+
     
 
 k, m = map(int, input().split())
@@ -69,39 +91,32 @@ for i in range(k): # k
             # rotate
             for m in range(1, 4):
                 tempgraph = rotate(tempgraph, (p, q))
-                tempvisit = set()
-                tempval = 0
-                for a in range(5):
-                    for b in range(5):
-                        if (a, b) not in tempvisit:
-                            visitlist = dfs(tempgraph, (a, b))
-                            tempvisit.update(visitlist)
-                            if len(visitlist) >= 3:
-                                tempval += len(visitlist)
-
-                if tempval > maxval: #value
-                    maxval = tempval
+                arr = dfs(tempgraph)
+                if not arr:
+                    continue
+                if len(arr) > maxval: #value
+                    maxval = len(arr)
                     maxrot = m
-                    maxarr = list(tempvisit)
+                    maxarr = arr
                     maxp = p
                     maxq = q
                     maxgraph = tempgraph
-                elif tempval == maxval: #rotate
+                elif len(arr) == maxval: #rotate
                     if maxrot > m:
                         maxrot = m
-                        maxarr = list(tempvisit)
+                        maxarr = arr
                         maxp = p
                         maxq = q
                         maxgraph = tempgraph
                     elif maxrot == m:
                         if maxq > q:
-                            maxarr = list(tempvisit)
+                            maxarr = arr
                             maxp = p
                             maxq = q
                             maxgraph = tempgraph
                         elif maxq == q:
                             if maxp > p:
-                                maxarr = list(tempvisit)
+                                maxarr = arr
                                 maxp = p
                                 maxgraph = tempgraph
     if maxval == 0:
@@ -123,18 +138,19 @@ for i in range(k): # k
                 maxgraph[x][y] = rep.popleft()
         # print(maxgraph)
         # check
-        tempvisit = set()
-        templist = []
+        tempvisited = set()
+        arrlist = []
         for x, y in maxarr:
-            if (x, y) not in tempvisit:
-                arr = dfs(maxgraph, (x, y))
+            if (x, y) not in tempvisited:
+                arr = dfs2(maxgraph, (x, y))
+                tempvisited.update(arr)
                 if len(arr) >= 3:
-                    templist.extend(arr)
-        if not templist:
+                    arrlist.extend(arr)
+        if not arrlist:
             break
         else:
-            maxarr = list(templist)
-            answer += len(templist)
+            maxarr = arrlist
+            answer += len(arrlist)
     if answer != 0:
         answers.append(str(answer))
 
