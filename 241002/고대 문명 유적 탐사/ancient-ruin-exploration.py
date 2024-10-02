@@ -23,30 +23,22 @@ def checkRange(x, y):
     return 0<= x < 5 and 0<= y <5
 
 
-def dfs(graph):
+def dfs(graph, start):
     dx = (-1, 0, 1, 0)
     dy = (0, 1, 0, -1)
-    visits = []
+    tovisit = []
     visited = set()
-    for i in range(5):
-        for j in range(5):
-            tovisit = []
-            visit = set()
-            if (i, j) not in visited:
-                tovisit.append((i, j))
-                v = graph[i][j]
-                while tovisit:
-                    x, y = tovisit.pop()
-                    visit.add((x, y))
-                    for d in range(4):
-                        nx = x + dx[d]
-                        ny = y + dy[d]
-                        if checkRange(nx, ny) and (nx, ny) not in visit and (nx, ny) not in visited and graph[nx][ny]==v:
-                            tovisit.append((nx, ny))
-                visited = visited.union(visit)
-                if len(visit) >= 3:
-                    visits+=list(visit)
-    return visits
+    tovisit.append(start)
+    v = graph[start[0]][start[1]]
+    while tovisit:
+        x, y = tovisit.pop()
+        visited.add((x, y))
+        for d in range(4):
+            nx = x + dx[d]
+            ny = y + dy[d]
+            if checkRange(nx, ny) and (nx, ny) not in visited and graph[nx][ny]==v:
+                tovisit.append((nx, ny))
+    return visited
     
 
 k, m = map(int, input().split())
@@ -74,60 +66,74 @@ for i in range(k): # k
             # rotate
             for m in range(1, 4):
                 tempgraph = rotate(tempgraph, (p, q))
-                arr = dfs(tempgraph)
-                if not arr:
-                    continue
-                if len(arr) > maxval: #value
-                    maxval = len(arr)
+                tempvisit = set()
+                tempval = 0
+                for a in range(5):
+                    for b in range(5):
+                        if (a, b) not in tempvisit:
+                            visitlist = dfs(tempgraph, (a, b))
+                            tempvisit.update(visitlist)
+                            if len(visitlist) >= 3:
+                                tempval += len(visitlist)
+
+                if tempval > maxval: #value
+                    maxval = tempval
                     maxrot = m
-                    maxarr = arr
+                    maxarr = list(tempvisit)
                     maxp = p
                     maxq = q
-                    maxgraph = [row[:] for row in tempgraph]
-                elif len(arr) == maxval: #rotate
+                    maxgraph = tempgraph
+                elif tempval == maxval: #rotate
                     if maxrot > m:
                         maxrot = m
-                        maxarr = arr
+                        maxarr = list(tempvisit)
                         maxp = p
                         maxq = q
-                        maxgraph = [row[:] for row in tempgraph]
+                        maxgraph = tempgraph
                     elif maxrot == m:
                         if maxq > q:
-                            maxarr = arr
+                            maxarr = list(tempvisit)
                             maxp = p
                             maxq = q
-                            maxgraph = [row[:] for row in tempgraph]
+                            maxgraph = tempgraph
                         elif maxq == q:
                             if maxp > p:
-                                maxarr = arr
+                                maxarr = list(tempvisit)
                                 maxp = p
-                                maxgraph = [row[:] for row in tempgraph]
+                                maxgraph = tempgraph
     if maxval == 0:
         break
-    print(maxgraph)
-    print(maxval)
-    print(maxp, maxq)
-    print(maxrot)
+
+    # print(maxgraph)
+    # print(maxval)
+    # print(maxp, maxq)
+    # print(maxrot)
     answer += maxval
-    if not maxarr:
-        continue
+    
     while True:
         # refill
         maxarr = sorted(maxarr, key=lambda x: (x[1], -x[0]))
-        print(maxarr)
+        # print(maxarr)
+        # print(rep)
         for x, y in maxarr:
             if rep:
                 maxgraph[x][y] = rep.popleft()
-        print(maxgraph)
+        # print(maxgraph)
         # check
-        arr = dfs(maxgraph) # 여기가 이상하게 나옴
-        if not arr:
+        tempvisit = set()
+        templist = []
+        for x, y in maxarr:
+            if (x, y) not in tempvisit:
+                arr = dfs(maxgraph, (x, y))
+                if len(arr) >= 3:
+                    templist.extend(arr)
+        if not templist:
             break
         else:
-            maxarr = arr
-            answer += len(arr)
+            maxarr = list(templist)
+            answer += len(templist)
     if answer != 0:
         answers.append(str(answer))
 
-if answer:
+if answers:
     print(' '.join(answers))
