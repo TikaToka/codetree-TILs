@@ -62,7 +62,6 @@ for i in range(m):
         if reduced > max_reduce:
             way_idx = w
             max_reduce = reduced
-    # print(way_idx)
     #move
     rx += drx[way_idx]
     ry += dry[way_idx]
@@ -96,7 +95,7 @@ for i in range(m):
                             santa[t] = temp
                             check_idx = t
                         else:
-                            alive[t] = -1
+                            alive[t] = 0
                             santa[t] = temp
                         break
             break
@@ -152,18 +151,19 @@ for i in range(m):
                             santa[t] = temp
                             check_idx = t
                         else:
-                            alive[t] = -1
+                            alive[t] = 0
                             santa[t] = temp
                         break
     # print('s', santa)
     # print(alive)
+    if sum(alive) == 0:
+        break
     sleep = [x - 1 for x in sleep]
     for s in range(len(santa)):
         if alive[s] == 1:
             score[s] += 1
     # print(score)
-    if sum(alive) == 0:
-        break
+    
         
 score = [str(x) for x in score]
 print(' '.join(score))
