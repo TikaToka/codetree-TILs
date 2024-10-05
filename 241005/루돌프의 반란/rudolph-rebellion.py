@@ -152,7 +152,6 @@ for i in range(m):
                         else:
                             alive[t] = 0
                             santa[t] = temp
-                        break
     # print('s', santa)
     # print(alive)
     if sum(alive) == 0:
