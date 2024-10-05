@@ -133,9 +133,11 @@ for i in range(m):
             if not check_inside(temp):
                 alive[s] = 0
                 santa[s] = temp
+                # print("HERE")
                 continue
             else:
                 board[temp[0]][temp[1]] += 1
+            # print("KKKKK")
             santa[s] = temp
             check_idx = s
             done = False
