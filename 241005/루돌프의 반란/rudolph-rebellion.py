@@ -98,7 +98,7 @@ for i in range(m):
                             alive[t] = 0
                             santa[t] = temp
                         break
-            break
+            
     # print('s1', santa)
     # print(alive)
     # 3
