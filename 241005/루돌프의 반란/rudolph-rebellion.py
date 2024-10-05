@@ -82,7 +82,6 @@ for i in range(m):
             else:
                 board[temp[0]][temp[1]] += 1
             check_idx = s
-            done = False
             while board[temp[0]][temp[1]] == 2:
                 for t in range(len(santa)):
                     if alive[t] != 1:
@@ -90,19 +89,18 @@ for i in range(m):
                     if temp == santa[t] and t != check_idx:
                         board[temp[0]][temp[1]] -= 1
                         temp = (temp[0] + drx[way_idx], temp[1] + dry[way_idx])
+                        santa[t] = temp
                         if check_inside(temp):
                             board[temp[0]][temp[1]] += 1
-                            santa[t] = temp
                             check_idx = t
                         else:
                             alive[t] = 0
                             santa[t] = temp
-                        break
-            
+
     # print('s1', santa)
     # print(alive)
     # 3
-    # santa
+    # santa move
     for s in range(len(santa)):
         if alive[s] != 1 or sleep[s] >= 1:
             continue
@@ -140,7 +138,6 @@ for i in range(m):
             # print("KKKKK")
             santa[s] = temp
             check_idx = s
-            done = False
             while board[temp[0]][temp[1]] == 2:
                 for t in range(len(santa)):
                     if alive[t] != 1:
