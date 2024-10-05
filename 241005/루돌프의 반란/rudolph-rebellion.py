@@ -145,7 +145,7 @@ for i in range(m):
                         continue
                     if temp == santa[t] and t != check_idx:
                         board[temp[0]][temp[1]] -= 1
-                        temp = (temp[0] + dsx[way], temp[1] + dsy[way])
+                        temp = (temp[0] - dsx[way], temp[1] - dsy[way])
                         if check_inside(temp):
                             board[temp[0]][temp[1]] += 1
                             santa[t] = temp
