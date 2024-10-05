@@ -162,6 +162,8 @@ for i in range(m):
         if alive[s] == 1:
             score[s] += 1
     # print(score)
+    if sum(alive) == 0:
+        break
         
 score = [str(x) for x in score]
 print(' '.join(score))
