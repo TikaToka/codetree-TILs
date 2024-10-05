@@ -95,8 +95,8 @@ for i in range(m):
                             check_idx = t
                         else:
                             alive[t] = 0
-                            santa[t] = temp
-
+                        break
+            break
     # print('s1', santa)
     # print(alive)
     # 3
@@ -131,11 +131,9 @@ for i in range(m):
             if not check_inside(temp):
                 alive[s] = 0
                 santa[s] = temp
-                # print("HERE")
                 continue
             else:
                 board[temp[0]][temp[1]] += 1
-            # print("KKKKK")
             santa[s] = temp
             check_idx = s
             while board[temp[0]][temp[1]] == 2:
@@ -152,6 +150,7 @@ for i in range(m):
                         else:
                             alive[t] = 0
                             santa[t] = temp
+                        break
     # print('s', santa)
     # print(alive)
     if sum(alive) == 0:
