@@ -54,7 +54,7 @@ for i in range(m):
     for w in range(8):
         dx, dy = drx[w], dry[w]
         nx, ny = rx + dx, ry + dy
-        if not check_inside((nx, ny)) and (nx, ny) not in santa:
+        if not check_inside((nx, ny)):
             continue
         reduced = min_distance - distance((nx, ny), santa[min_idx])
         if reduced > max_reduce:
@@ -80,7 +80,7 @@ for i in range(m):
             else:
                 board[temp[0]][temp[1]] += 1
             check_idx = s
-            while board[temp[0]][temp[1]] == 2:
+            while board[temp[0]][temp[1]] == 2 and check_inside(temp):
                 for t in range(len(santa)):
                     if alive[t] != 1:
                         continue
@@ -134,7 +134,7 @@ for i in range(m):
                 board[temp[0]][temp[1]] += 1
             santa[s] = temp
             check_idx = s
-            while board[temp[0]][temp[1]] == 2:
+            while board[temp[0]][temp[1]] == 2 and check_inside(temp):
                 for t in range(len(santa)):
                     if alive[t] != 1:
                         continue
