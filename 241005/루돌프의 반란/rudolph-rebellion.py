@@ -44,11 +44,9 @@ for i in range(m):
             min_idx = s
         elif dist == min_distance:
             if santa[min_idx][0] < santa[s][0]:
-                min_distance = dist
                 min_idx = s
             elif santa[min_idx][0] == santa[s][0]:
                 if santa[min_idx][1] < santa[s][1]:
-                    min_distance = dist
                     min_idx = s          
     # find way
     way_idx = -1
@@ -56,7 +54,7 @@ for i in range(m):
     for w in range(8):
         dx, dy = drx[w], dry[w]
         nx, ny = rx + dx, ry + dy
-        if not check_inside((nx, ny)):
+        if not check_inside((nx, ny)) and (nx, ny) not in santa:
             continue
         reduced = min_distance - distance((nx, ny), santa[min_idx])
         if reduced > max_reduce:
