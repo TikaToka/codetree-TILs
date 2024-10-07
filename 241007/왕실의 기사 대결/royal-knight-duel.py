@@ -80,7 +80,6 @@ for q in range(Q):
             continue
         for j in knight[k]:
             if board[j[0]][j[1]] == 1:
-                print('j', (k, j))
                 health[k] -= 1
                 dmg[k] += 1
         if health[k] <= 0:
