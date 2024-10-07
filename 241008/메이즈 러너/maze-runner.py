@@ -41,7 +41,7 @@ for i in range(1, N+1):
 for i in range(M):
     x, y = input().split()
     human.append((int(x), int(y)))
-    hBoard[int(x)][int(y)] = 1
+    hBoard[int(x)][int(y)] += 1
 
 ex, ey = map(int, input().split())
 hBoard[ex][ey] = -1
@@ -65,9 +65,8 @@ for i in range(K):
                 if (nx, ny) == (ex, ey):
                     hBoard[x][y] -= 1
                     human.pop(h)
-                    
                 else:
-                    hBoard[x][y]=0
+                    hBoard[x][y] -= 1
                     human[h] = (nx, ny)
                     hBoard[nx][ny] += 1
                 movement += 1
