@@ -72,13 +72,7 @@ for i in range(K):
                     hBoard[nx][ny] = 1
                 movement += 1
                 break
-    # stop = True
-    # for j in human:
-    #     if j == (-1 * N, -1 * N):
-    #         stop = False
-    
-    # if stop:
-    #     break
+
     if not human:
         break
 
@@ -90,7 +84,6 @@ for i in range(K):
                 if not (k <= ex < k+j and l <= ey < l+j): # 출구 유무
                     continue
                 # 사람유무
-                human = sorted(human)
                 for h in range(len(human)):
                     # if human[h] == (-1 * N, -1 * N):
                     #     continue
@@ -142,6 +135,7 @@ for i in range(K):
     
     # print(human)
     # print(ex, ey)
+    # print(movement)
 
 print(movement)
 print(ex, ey)
