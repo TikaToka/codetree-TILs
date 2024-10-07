@@ -90,6 +90,7 @@ for i in range(K):
                 if not (k <= ex < k+j and l <= ey < l+j): # 출구 유무
                     continue
                 # 사람유무
+                human = sorted(human)
                 for h in range(len(human)):
                     # if human[h] == (-1 * N, -1 * N):
                     #     continue
@@ -134,6 +135,10 @@ for i in range(K):
         (x, y) = h
         hBoard[x][y] = 1
         hBoard[ex][ey] = -1
+
+    # for j in board[1:]:
+    #     print(j[1:])
+    # print('.')
     
     # print(human)
     # print(ex, ey)
