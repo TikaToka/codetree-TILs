@@ -67,7 +67,7 @@ for i in range(K):
                     human.pop(h)
                     
                 else:
-                    hBoard[x][y] -= 1
+                    hBoard[x][y]=0
                     human[h] = (nx, ny)
                     hBoard[nx][ny] += 1
                 movement += 1
