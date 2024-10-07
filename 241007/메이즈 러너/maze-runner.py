@@ -61,15 +61,15 @@ for i in range(K):
         x, y = human[h][0], human[h][1]
         for d in range(4):
             nx, ny = x + dx[d], y + dy[d]
-            if check((nx, ny)) and board[nx][ny] ==0 and (nx, ny) not in human and distance((x, y), (ex, ey)) > distance((nx, ny), (ex, ey)):
+            if check((nx, ny)) and board[nx][ny] ==0  and distance((x, y), (ex, ey)) > distance((nx, ny), (ex, ey)): # and (nx, ny) not in human
                 if (nx, ny) == (ex, ey):
-                    hBoard[x][y] = 0
+                    hBoard[x][y] -= 1
                     human.pop(h)
                     
                 else:
                     hBoard[x][y]=0
                     human[h] = (nx, ny)
-                    hBoard[nx][ny] = 1
+                    hBoard[nx][ny] += 1
                 movement += 1
                 break
 
