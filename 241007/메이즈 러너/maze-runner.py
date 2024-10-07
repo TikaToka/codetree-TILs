@@ -47,7 +47,8 @@ ex, ey = map(int, input().split())
 hBoard[ex][ey] = -1
 movement = 0
 
-for i in range(K+1):
+for i in range(K):
+    # print(i)
     # print("time", i)
     human = sorted(human, key=(lambda x: distance(x, (ex, ey))), reverse=True)
     # print(human)
