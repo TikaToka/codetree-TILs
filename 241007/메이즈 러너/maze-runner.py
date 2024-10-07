@@ -27,7 +27,7 @@ def check(node):
 
 N, M, K = map(int, input().split())
 
-human = [None]
+human = []
 
 
 board = [[0 for _ in range(N+1)] for _ in range(N+1)]
@@ -41,37 +41,43 @@ for i in range(1, N+1):
 for i in range(M):
     x, y = input().split()
     human.append((int(x), int(y)))
-    hBoard[int(x)][int(y)] = i+1
+    hBoard[int(x)][int(y)] = 1
 
 ex, ey = map(int, input().split())
 hBoard[ex][ey] = -1
 movement = 0
 
 for i in range(K):
+    # print("time", i)
+    human = sorted(human, key=(lambda x: distance(x, (ex, ey))), reverse=True)
+    # print(human)
+    # print(hBoard)
     # move
     for h in range(len(human)-1, -1, -1):
-        if human[h] == None:
-            continue
+        # if human[h] == None:
+        #     continue
         x, y = human[h][0], human[h][1]
         for d in range(4):
             nx, ny = x + dx[d], y + dy[d]
             if check((nx, ny)) and board[nx][ny] ==0 and (nx, ny) not in human and distance((x, y), (ex, ey)) > distance((nx, ny), (ex, ey)):
                 if (nx, ny) == (ex, ey):
                     hBoard[x][y] = 0
-                    human[h] = None
+                    human.pop(h)
+                    
                 else:
                     hBoard[x][y]=0
                     human[h] = (nx, ny)
-                    hBoard[nx][ny] = h
+                    hBoard[nx][ny] = 1
                 movement += 1
                 break
+    # stop = True
+    # for j in human:
+    #     if j == (-1 * N, -1 * N):
+    #         stop = False
     
-    stop = True
-    for j in human:
-        if j == None:
-            stop = False
-    
-    if stop:
+    # if stop:
+    #     break
+    if not human:
         break
 
     found = False
@@ -83,10 +89,11 @@ for i in range(K):
                     continue
                 # 사람유무
                 for h in range(len(human)):
-                    if human[h] == None:
-                        continue
+                    # if human[h] == (-1 * N, -1 * N):
+                    #     continue
                     (hx, hy) = human[h]
                     if (k <= hx < k+j and l <= hy < l+j):
+                        # print(j, k, l)
                         temp = [row[l:l+j] for row in board[k:k+j]]
                         rotated = rotate(temp, j)
                         for p in range(k, k+j):
@@ -97,13 +104,20 @@ for i in range(K):
                         for p in range(k, k+j):
                             for q in range(l, l+j):
                                 hBoard[p][q] = rotated[p-k][q-l]
-                        for p in range(k, k+j):
-                            for q in range(l, l+j):
+                        # for p in range(0 k+j):
+                        #     for q in range(l, l+j):
+                        #         if hBoard[p][q] == -1:
+                        #             ex, ey = p, q
+                        #         elif hBoard[p][q] != 0:
+                        #             human[hBoard[p][q]] = (p, q)
+                        # print(hBoard)
+                        human = []
+                        for p in range(1, N+1):
+                            for q in range(1, N+1):
                                 if hBoard[p][q] == -1:
                                     ex, ey = p, q
-                                elif hBoard[p][q] != 0:
-                                    i
-                                    human[hBoard[p][q]] = (p, q)
+                                elif hBoard[p][q] == 1:
+                                    human.append((p, q))
                         found = True
                         break
                 if found:
@@ -112,6 +126,15 @@ for i in range(K):
                 break
         if found:
             break
+
+    hBoard = [[0 for _ in range(N+1)] for _ in range(N+1)]
+    for h in human:
+        (x, y) = h
+        hBoard[x][y] = 1
+        hBoard[ex][ey] = -1
+    
+    # print(human)
+    # print(ex, ey)
 
 print(movement)
 print(ex, ey)
