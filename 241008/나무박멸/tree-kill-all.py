@@ -55,7 +55,7 @@ for yrs in range(m):
     maxval = -1
     for i in range(n):
         for j in range(n):
-            if board[i][j] <= 0:
+            if board[i][j] < 0:
                 continue
             temp = board[i][j]
             for d in range(4):
