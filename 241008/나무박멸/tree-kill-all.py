@@ -20,6 +20,7 @@ killers = []
 
 answer = 0
 for yrs in range(m):
+    # print(board)
     # grow +  baby
     grow = {}
     for i in range(n):
@@ -47,12 +48,14 @@ for yrs in range(m):
     for (x, y) in grow.keys():
         board[x][y] += grow[(x, y)]
 
+    # print(board)
+
     # killer
     maxcoord = (-1, -1)
     maxval = -1
     for i in range(n):
         for j in range(n):
-            if board[i][j] < 0:
+            if board[i][j] <= 0:
                 continue
             temp = board[i][j]
             for d in range(4):
@@ -84,10 +87,12 @@ for yrs in range(m):
                 if board[i][j] == 0:
                     maxcoord = (i, j)
     # kill
+    print(maxcoord)
     (x, y) = maxcoord
     if maxcoord not in killers:
         killers.append(maxcoord)
     kBoard[x][y] = c+1
+    # if board[x][y] != 0:
     answer += board[x][y]
     board[x][y] = 0
     for i in range(4):
@@ -119,6 +124,7 @@ for yrs in range(m):
     #     if kBoard[x][y] == 0:
     #         print(x, y, 'killed')
     #         killers.remove((x, y))
-
+    # print(board)
+    # print(answer)
 
 print(answer)
