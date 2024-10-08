@@ -96,14 +96,7 @@ for yrs in range(m):
                     if (nx, ny) not in killers:
                         killers.append((nx, ny))
                     kBoard[nx][ny] = c+1
-                elif board[nx][ny] == 0:
-                    answer += board[nx][ny]
-                    board[nx][ny] = 0
-                    if (nx, ny) not in killers:
-                        killers.append((nx, ny))
-                    kBoard[nx][ny] = c+1
-                    break
-                elif board[nx][ny] == -1:
+                elif board[nx][ny] <= 0:
                     break
             else:
                 break
