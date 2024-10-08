@@ -78,7 +78,11 @@ for yrs in range(m):
                         maxval = temp
                         maxcoord = (i, j)
 
-
+    if maxval == -1:
+        for i in range(n):
+            for j in range(n):
+                if board[i][j] == 0:
+                    maxcoord = (i, j)
     # kill
     (x, y) = maxcoord
     if maxcoord not in killers:
