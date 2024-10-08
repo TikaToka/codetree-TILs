@@ -8,7 +8,7 @@ def check(board):
     for a in range(N):
         for b in range(M):
             if board[a][b] > 0:
-                    cnt += 1
+                cnt += 1
     if cnt == 1:
         return True
     return False
@@ -48,6 +48,7 @@ for i in range(N):
     board[i] = [int(x) for x in input().split()]
 
 recent = [[-1 for _ in range(M)] for _ in range(N)]
+# print(board)
 # print(board)
 for i in range(K):
     if check(board):
@@ -121,7 +122,8 @@ for i in range(K):
                     if (a, b) not in route:
                         board[a][b] += 1
     else: # bomb
-        attacked = set(weak)
+        attacked = set()
+        attacked.add(weak)
         (x, y) = strong
         board[x][y] -= weakDmg
         attacked.add((x, y))
@@ -140,7 +142,7 @@ for i in range(K):
             for b in range(M):
                 if board[a][b] > 0 and (a, b) not in attacked:
                     board[a][b] += 1
-
+    # print(board)
     if check(board):
         break
     
