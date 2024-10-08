@@ -70,7 +70,7 @@ for i in range(K):
     strDmg = -1
     for a in range(N):
         for b in range(M):
-            if board[a][b] <= 0:
+            if board[a][b] <= 0 or (a, b) == weak:
                 continue
             if board[a][b] > strDmg: #dmg
                 strong = (a, b)
