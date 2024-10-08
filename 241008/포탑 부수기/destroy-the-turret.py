@@ -3,6 +3,16 @@ from collections import deque
 dx = (0, 1, 0, -1, -1, 1, 1, -1)
 dy = (1, 0, -1, 0, 1, 1, -1, -1)
 
+def check(board):
+    cnt = 0
+    for a in range(N):
+        for b in range(M):
+            if board[a][b] > 0:
+                    cnt += 1
+    if cnt == 1:
+        return True
+    return False
+
 def bfs(board, start, end):
     tovisit = deque()
     visited = []
@@ -99,6 +109,9 @@ for i in range(K):
                 board[node[0]][node[1]] -= weakDmg // 2
             else:
                 board[node[0]][node[1]] -= weakDmg
+        
+        if check(board):
+            break
         # repair
         for a in range(N):
             for b in range(M):
@@ -114,21 +127,18 @@ for i in range(K):
             nx, ny = x + dx[d], y + dy[d]
             nx = nx % N
             ny = ny % M
-            if board[nx][ny] > 0 and not((nx, ny) == weak):
+            if board[nx][ny] > 0 and (nx, ny) != weak:
                 board[nx][ny] -= weakDmg // 2
                 attacked.add((nx, ny))
+                
+        if check(board):
+            break
         # repair
         for a in range(N):
             for b in range(M):
                 if board[a][b] > 0 and (a, b) not in attacked:
                     board[a][b] += 1
-    cnt = 0
-    for a in range(N):
-        for b in range(M):
-            if board[a][b] > 0:
-                    cnt += 1
-    if cnt == 1:
-        break
+    
 maxDmg = -9999999999999
 
 for a in range(N):
