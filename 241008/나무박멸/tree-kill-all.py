@@ -1,0 +1,111 @@
+dx = (-1, 0, 1, 0)
+dy = (0, 1, 0, -1)
+kx = (-1, 1, 1, -1)
+ky = (1, 1, -1, -1)
+
+def check(node):
+    (x, y) = node
+    return 0<= x < n and 0<= y < n
+
+n, m, k, c = map(int, input().split())
+
+board = [[0 for _ in range(n)] for _ in range(n)]
+
+for i in range(n):
+    board[i] = [x for x in map(int, input().split())]
+
+kBoard = [[0 for _ in range(n)] for _ in range(n)]
+killers = []
+
+
+answer = 0
+for yrs in range(m):
+    # print(killers)
+    # print(board)
+    # grow +  baby
+    grow = {}
+    for i in range(n):
+        for j in range(n):
+            if board[i][j] > 0:
+                cnt = 0
+                tree = 0
+                temp = []
+                for d in range(4):
+                    nx, ny = i + dx[d], j + dy[d]
+                    if check((nx, ny)):
+                        if board[nx][ny] == 0 and (nx, ny) not in killers:
+                            cnt += 1
+                            temp.append((nx, ny))
+                        elif board[nx][ny] > 0:
+                            tree += 1
+                board[i][j] += tree
+                if temp:
+                    for (x, y) in temp:
+                        if (x, y) not in grow.keys():
+                            grow[(x, y)] = board[i][j] // cnt
+                        else:
+                            grow[(x, y)] += board[i][j] // cnt
+
+    for (x, y) in grow.keys():
+        board[x][y] += grow[(x, y)]
+    # print(grow)
+    # print(board)
+    # killer
+    maxcoord = (-1, -1)
+    maxval = -1
+    for i in range(n):
+        for j in range(n):
+            if board[i][j] <= 0:
+                continue
+            temp = board[i][j]
+            for d in range(4):
+                for l in range(1, k+1):
+                    nx, ny = i + l * kx[d], j + l *ky[d]
+                    if check((nx, ny)):
+                        if board[nx][ny] > 0:
+                            temp += board[nx][ny]
+                        elif board[nx][ny] == -1:
+                            break
+                    else: 
+                        break
+            # print(i, j, temp)
+            if maxval < temp:
+                maxval = temp
+                maxcoord = (i, j)
+            elif maxval == temp:
+                if i < maxcoord[0]:
+                    maxval = temp
+                    maxcoord = (i, j)
+                elif i == maxcoord:
+                    if j < maxcoord[1]:
+                        maxval = temp
+                        maxcoord = (i, j)
+    # kill
+    if maxcoord not in killers:
+        killers.append(maxcoord)
+    kBoard[maxcoord[0]][maxcoord[1]] = c+1
+    (x, y) = maxcoord
+    answer += board[x][y]
+    board[x][y] = 0
+    for i in range(4):
+        for j in range(1, k+1):
+            nx, ny = x + j * kx[i], y + j * ky[i]
+            if check((nx, ny)):
+                if board[nx][ny] >= 0:
+                    answer += board[nx][ny]
+                    board[nx][ny] = 0
+                    if (nx, ny) not in killers:
+                        killers.append((nx, ny))
+                    kBoard[nx][ny] = c+1
+                elif board[nx][ny] == -1:
+                    break
+            else:
+                break
+    # print(board)
+    # decrease yr or remove
+    for (x, y) in killers:
+        kBoard[x][y] -= 1
+        if kBoard[x][y] == 0:
+            killers.remove((x, y))
+
+print(answer)
