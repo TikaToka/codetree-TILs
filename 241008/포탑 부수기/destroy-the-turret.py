@@ -87,14 +87,15 @@ for i in range(K):
                         if b < strong[1]: # c
                             strong = (a, b)
                             strDmg = board[a][b]
-    # print(board)
     # attack
     route = bfs(board, weak, strong)
     # print(route)
     #razer
     if route != None:
         for node in route:
-            if node != strong:
+            if node == weak:
+                continue
+            elif node != strong:
                 board[node[0]][node[1]] -= weakDmg // 2
             else:
                 board[node[0]][node[1]] -= weakDmg
