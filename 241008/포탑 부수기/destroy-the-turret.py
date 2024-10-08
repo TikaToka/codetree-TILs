@@ -121,9 +121,15 @@ for i in range(K):
             for b in range(M):
                 if board[a][b] > 0 and (a, b) not in attacked:
                     board[a][b] += 1
-
-    # print(board)
+    cnt = 0
+    for a in range(N):
+        for b in range(M):
+            if board[a][b] > 0:
+                    cnt += 1
+    if cnt == 1:
+        break
 maxDmg = -9999999999999
+
 for a in range(N):
     for b in range(M):
         if board[a][b] > maxDmg:
