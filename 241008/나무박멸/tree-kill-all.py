@@ -87,7 +87,7 @@ for yrs in range(m):
                 if board[i][j] == 0:
                     maxcoord = (i, j)
     # kill
-    print(maxcoord)
+    # print(maxcoord)
     (x, y) = maxcoord
     if maxcoord not in killers:
         killers.append(maxcoord)
