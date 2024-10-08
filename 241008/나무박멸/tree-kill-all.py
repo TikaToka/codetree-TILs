@@ -64,7 +64,7 @@ for yrs in range(m):
                     if check((nx, ny)):
                         if board[nx][ny] > 0:
                             temp += board[nx][ny]
-                        elif board[nx][ny] <=0: # 빈칸에서도
+                        elif board[nx][ny] <=0: # 빈칸만나면 멈춰야해
                             break
                     else: 
                         break
@@ -81,7 +81,7 @@ for yrs in range(m):
                         maxval = temp
                         maxcoord = (i, j)
 
-    if maxval == -1:
+    if maxcoord == (-1, -1):
         for i in range(n):
             for j in range(n):
                 if board[i][j] == 0:
