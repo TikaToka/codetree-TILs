@@ -140,6 +140,9 @@ for i in range(K):
             for b in range(M):
                 if board[a][b] > 0 and (a, b) not in attacked:
                     board[a][b] += 1
+
+    if check(board):
+        break
     
 maxDmg = -9999999999999
 
