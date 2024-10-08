@@ -50,6 +50,8 @@ for i in range(N):
 recent = [[-1 for _ in range(M)] for _ in range(N)]
 # print(board)
 for i in range(K):
+    if check(board):
+        break
     # select weak
     weak = (-1, -1)
     weakDmg = 5001
@@ -130,7 +132,7 @@ for i in range(K):
             if board[nx][ny] > 0 and (nx, ny) != weak:
                 board[nx][ny] -= weakDmg // 2
                 attacked.add((nx, ny))
-                
+
         if check(board):
             break
         # repair
