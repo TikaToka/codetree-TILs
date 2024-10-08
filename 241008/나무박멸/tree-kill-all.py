@@ -20,8 +20,6 @@ killers = []
 
 answer = 0
 for yrs in range(m):
-    # print(killers)
-    # print(board)
     # grow +  baby
     grow = {}
     for i in range(n):
@@ -48,8 +46,7 @@ for yrs in range(m):
 
     for (x, y) in grow.keys():
         board[x][y] += grow[(x, y)]
-    # print(grow)
-    # print(board)
+
     # killer
     maxcoord = (-1, -1)
     maxval = -1
@@ -64,7 +61,7 @@ for yrs in range(m):
                     if check((nx, ny)):
                         if board[nx][ny] > 0:
                             temp += board[nx][ny]
-                        elif board[nx][ny] == -1:
+                        elif board[nx][ny] <=0: # 빈칸에서도
                             break
                     else: 
                         break
@@ -80,6 +77,8 @@ for yrs in range(m):
                     if j < maxcoord[1]:
                         maxval = temp
                         maxcoord = (i, j)
+
+
     # kill
     (x, y) = maxcoord
     if maxcoord not in killers:
@@ -91,19 +90,26 @@ for yrs in range(m):
         for j in range(1, k+1):
             nx, ny = x + j * kx[i], y + j * ky[i]
             if check((nx, ny)):
-                if board[nx][ny] >= 0:
+                if board[nx][ny] > 0:
                     answer += board[nx][ny]
                     board[nx][ny] = 0
                     if (nx, ny) not in killers:
                         killers.append((nx, ny))
                     kBoard[nx][ny] = c+1
+                elif board[nx][ny] == 0:
+                    answer += board[nx][ny]
+                    board[nx][ny] = 0
+                    if (nx, ny) not in killers:
+                        killers.append((nx, ny))
+                    kBoard[nx][ny] = c+1
+                    break
                 elif board[nx][ny] == -1:
                     break
             else:
                 break
     # print(board)
-    # decrease yr or remove
 
+    # decrease yr or remove
     for i in range(n):
         for j in range(n):
             if kBoard[i][j] > 0:
