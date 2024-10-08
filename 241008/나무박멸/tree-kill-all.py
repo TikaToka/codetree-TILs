@@ -81,10 +81,10 @@ for yrs in range(m):
                         maxval = temp
                         maxcoord = (i, j)
     # kill
+    (x, y) = maxcoord
     if maxcoord not in killers:
         killers.append(maxcoord)
-    kBoard[maxcoord[0]][maxcoord[1]] = c+1
-    (x, y) = maxcoord
+    kBoard[x][y] = c+1
     answer += board[x][y]
     board[x][y] = 0
     for i in range(4):
@@ -103,9 +103,19 @@ for yrs in range(m):
                 break
     # print(board)
     # decrease yr or remove
-    for (x, y) in killers:
-        kBoard[x][y] -= 1
-        if kBoard[x][y] == 0:
-            killers.remove((x, y))
+
+    for i in range(n):
+        for j in range(n):
+            if kBoard[i][j] > 0:
+                kBoard[i][j] -= 1
+                if kBoard[i][j] == 0:
+                    killers.remove((i, j))
+    # for (x, y) in killers:
+    #     print(x, y)
+    #     kBoard[x][y] -= 1
+    #     if kBoard[x][y] == 0:
+    #         print(x, y, 'killed')
+    #         killers.remove((x, y))
+
 
 print(answer)
