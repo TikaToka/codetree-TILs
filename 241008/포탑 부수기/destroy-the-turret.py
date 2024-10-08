@@ -114,7 +114,7 @@ for i in range(K):
             nx, ny = x + dx[d], y + dy[d]
             nx = nx % N
             ny = ny % M
-            if board[nx][ny] > 0:
+            if board[nx][ny] > 0 and not((nx, ny) == weak):
                 board[nx][ny] -= weakDmg // 2
                 attacked.add((nx, ny))
         # repair
