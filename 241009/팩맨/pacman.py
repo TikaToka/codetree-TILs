@@ -18,10 +18,12 @@ eWay = []
 dead = []
 dTime = []
 
+
 mdx = (-1, -1, 0, 1, 1, 1, 0, -1)
 mdy = (0, -1, -1, -1, 0, 1, 1, 1)
 
 cBoard = [[0 for _ in range(5)] for _ in range(5)]
+dBoard = [[0 for _ in range(5)] for _ in range(5)]
 
 for i in range(m):
     r, c, d = map(int, input().split())
@@ -30,8 +32,6 @@ for i in range(m):
     mWay.append(d-1)
 
 for turn in range(t):
-    # print(turn, 'turn')
-    # print('turn',  turn)
     # egg
     for i in range(len(monster)):
         egg.append(monster[i])
@@ -46,7 +46,7 @@ for turn in range(t):
         (x, y) = monster[i]
         for d in range(8):
             nx, ny = x + mdx[(mWay[i] + d) % 8], y + mdy[(mWay[i] + d) % 8]
-            if check((nx, ny)) and (nx, ny) != (px, py) and (nx, ny) not in dead: # 안벗어났거나 팩맨 없음 시체없음
+            if check((nx, ny)) and (nx, ny) != (px, py) and dBoard[nx][ny] == 0: # 안벗어났거나 팩맨 없음 시체없음
                 cBoard[x][y] -= 1
                 monster[i] = (nx, ny)
                 cBoard[nx][ny] += 1
@@ -94,6 +94,7 @@ for turn in range(t):
                 mWay.pop(j)
                 cBoard[px][py] -= 1
                 dead.append((px, py))
+                dBoard[px][py] += 1
                 dTime.append(-3)
 
     # print(egg)
@@ -114,6 +115,7 @@ for turn in range(t):
         dTime[i] +=1
         if dTime[i] == 0:
             dTime.pop(i)
+            dBoard[dead[i][0]][dead[i][1]] -= 1
             dead.pop(i)
 
     # print(dead)
@@ -121,9 +123,3 @@ for turn in range(t):
     # print(mWay)
 
 print(len(monster))
-
-# a b c d e f g h
-
-# h d c f b a e g
-
-# h d f g
