@@ -1,15 +1,6 @@
 pdx = (-1, 0, 1, 0)
 pdy = (0, -1, 0, 1)
 
-def countMonster(node):
-    cnt = 0
-    where = []
-    for i in range(len(monster)):
-        if monster[i] == node:
-            cnt += 1
-            where.append(monster[i])
-    return cnt, where
-
 def check(node):
     (x, y) = node
     return 1<=x<5 and 1<=y<5
@@ -97,7 +88,6 @@ for turn in range(t):
     for i in pMove:
         px += pdx[i]
         py += pdy[i]
-        where = countMonster((px, py))[1]
         for j in range(len(monster)-1, -1, -1):
             if monster[j] == (px, py):
                 monster.pop(j)
