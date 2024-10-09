@@ -14,8 +14,6 @@ def check(node):
     (x, y) = node
     return 1<=x<5 and 1<=y<5
 
-board = [[0 for _ in range(5)] for _ in range(5)]
-
 # replicate
 m, t = map(int, input().split())
 px, py = map(int, input().split())
@@ -64,18 +62,6 @@ for turn in range(t):
                 if done:
                     break
 
-    # xx = [[0 for _ in range(4)] for _ in range(4)]
-    # for i in range(len(monster)):
-    #     if activate[i] == 2:
-    #         xx[monster[i][0]-1][monster[i][1]-1] += 1
-    # print(xx)
-    # xx = [[0 for _ in range(4)] for _ in range(4)]
-    # print('--')
-    # for i in range(len(monster)):
-    #     if activate[i] < 0:
-    #         xx[monster[i][0]-1][monster[i][1]-1] += 1
-    # print(xx)
-    # pacman move
     maxval = -1
     pMove = [-1, -1, -1]
     for a in range(4):
@@ -87,27 +73,22 @@ for turn in range(t):
             bx, by = ax + pdx[b], ay + pdy[b]
             if not check((bx, by)):
                 continue
-            # if (bx, by) != (px, py):
-            #     temp += countMonster((bx, by))[0]
-            temp += countMonster((bx, by))[0]
+            bb = countMonster((bx, by))[0]
+            temp += bb
             for c in range(4):
                 cx, cy = bx + pdx[c], by + pdy[c]
                 if not check((cx, cy)):
                     continue
                 if (cx, cy) != (ax, ay):
-                    temp += countMonster((cx, cy))[0]
+                    cc = countMonster((cx, cy))[0]
+                    temp += cc
                 # temp += countMonster((cx, cy))[0]
                 if temp > maxval:
                     maxval = temp
                     pMove = [a, b, c]
                 if (cx, cy) != (ax, ay):
-                    temp -= countMonster((cx, cy))[0]
-                # if (cx, cy) != (px, py):
-                #     temp -= countMonster((cx, cy))[0]
-                # temp -= countMonster((cx, cy))[0]
-            # if (bx, by) != (px, py):
-            #     temp -= countMonster((bx, by))[0]
-            temp -= countMonster((bx, by))[0]
+                    temp -= cc
+            temp -= bb
 
     # print(pMove)
 
