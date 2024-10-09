@@ -20,13 +20,21 @@ px, py = map(int, input().split())
 
 monster = []
 mWay = []
-activate = [] # 1 live # 0 egg # -1 dead
+activate = []
+
+egg = set()
+
+dead = set()
+
 mdx = (-1, -1, 0, 1, 1, 1, 0, -1)
 mdy = (0, -1, -1, -1, 0, 1, 1, 1)
+
+cBoard = [[0 for _ in range(5)] for _ in range(5)]
 
 for i in range(m):
     r, c, d = map(int, input().split())
     monster.append((r, c))
+    cBoard[r][c] += 1
     mWay.append(d-1)
     activate.append(2) # live
 
@@ -34,11 +42,13 @@ for i in range(m):
 for turn in range(t):
     # print('turn',  turn)
     # egg
+        
     for i in range(len(monster)):
         if activate[i] == 2:
             monster.append(monster[i])
             mWay.append(mWay[i])
             activate.append(1) 
+
     for i in range(len(monster)):
         if activate[i] == 2: # 살아있는 것만
             done = False
@@ -55,7 +65,9 @@ for turn in range(t):
                         # if not (i != j and monster[j] == (nx, ny) and activate[j] < 0 ):
                         #     print(nx,ny)
                     if not thereis:
+                        cBoard[monster[i][0]][monster[i][1]] -= 1
                         monster[i] = (nx, ny)
+                        cBoard[nx][ny] += 1
                         mWay[i] = (mWay[i] + d) % 8
                         done = True
 
@@ -68,19 +80,19 @@ for turn in range(t):
         ax, ay = px + pdx[a], py + pdy[a]
         if not check((ax, ay)):
             continue
-        temp = countMonster((ax, ay))[0]
+        temp = cBoard[ax][ay]
         for b in range(4):
             bx, by = ax + pdx[b], ay + pdy[b]
             if not check((bx, by)):
                 continue
-            bb = countMonster((bx, by))[0]
+            bb = cBoard[bx][by]
             temp += bb
             for c in range(4):
                 cx, cy = bx + pdx[c], by + pdy[c]
                 if not check((cx, cy)):
                     continue
                 if (cx, cy) != (ax, ay):
-                    cc = countMonster((cx, cy))[0]
+                    cc = cBoard[cx][cy]
                     temp += cc
                 # temp += countMonster((cx, cy))[0]
                 if temp > maxval:
@@ -98,14 +110,20 @@ for turn in range(t):
         where = countMonster((px, py))[1]
         for w in where:
             activate[w] = -3
+            cBoard[monster[w][0]][monster[w][1]] -= 1
     
 
     # hatch and remain 
-    for i in range(len(monster)):
+    for i in range(len(monster)-1, -1, -1):
         if activate[i] == 1:
             activate[i] = 2
+            cBoard[monster[i][0]][monster[i][1]] += 1
         elif activate[i] < 0: # 시체 생명
             activate[i] += 1
+            if activate[i] == 0:
+                monster.pop(i)
+                activate.pop(i)
+                mWay.pop(i)
 
 
 
