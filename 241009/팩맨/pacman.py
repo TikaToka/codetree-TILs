@@ -1,5 +1,3 @@
-import copy
-
 pdx = (-1, 0, 1, 0)
 pdy = (0, -1, 0, 1)
 
@@ -28,7 +26,6 @@ for i in range(m):
 for turn in range(t):
     # print(turn, 'turn')
     # egg
-    egg = copy.deepcopy(monster)
     egg = [[[] for _ in range(5)] for _ in range(5)]
     for i in range(1, 5):
         for j in range(1, 5):
