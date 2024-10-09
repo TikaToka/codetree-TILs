@@ -22,13 +22,13 @@ def bfs(board, start):
 
 def rotate(dice, d):
     nDice = [row[:] for row in dice]
-    if d == 0:
+    if d == 2:
         for i in range(4):
             if i == 3:
                 nDice[i][1] = dice[0][1]
             else:
                 nDice[i][1] = dice[i+1][1]
-    elif d == 2:
+    elif d == 0:
         for i in range(4):
             if i == 0:
                 nDice[i][1] = dice[3][1]
@@ -73,7 +73,7 @@ dice[3][1] = 1
 
 
 for turn in range(m):
-
+    # print('way', way)
     x, y = x + dx[way], y + dy[way]
     
     dice = rotate(dice, way)
@@ -82,6 +82,7 @@ for turn in range(m):
     answer += board[x][y] * count
 
     value = dice[1][1]
+    # print(value)
 
     # change d
     if board[x][y] < value:
