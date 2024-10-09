@@ -92,7 +92,6 @@ for turn in range(t):
         px += pdx[i]
         py += pdy[i]
         where = countMonster((px, py))[1]
-        print(where)
         for w in where:
             activate[w] = -3
 
