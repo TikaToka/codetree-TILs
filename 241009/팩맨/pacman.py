@@ -1,6 +1,15 @@
 pdx = (-1, 0, 1, 0)
 pdy = (0, -1, 0, 1)
 
+def tcountMonster(node):
+    cnt = 0
+    where = []
+    for i in range(len(monster)):
+        if monster[i] == node and tActivate[i] == 2:
+            cnt += 1
+            where.append(i)
+    return cnt, where
+
 def countMonster(node):
     cnt = 0
     where = []
@@ -32,16 +41,18 @@ for i in range(m):
     mWay.append(d-1)
     activate.append(2) # live
 
-for i in range(len(monster)):
-    monster.append(monster[i])
-    mWay.append(mWay[i])
-    activate.append(1) # egg
 
 # print(monster)
-# print(mWay)
 # print(activate)
 
 for turn in range(t):
+    # print('turn',  turn)
+    # egg
+    for i in range(len(monster)):
+        if activate[i] == 2:
+            monster.append(monster[i])
+            mWay.append(mWay[i])
+            activate.append(1) 
     for i in range(len(monster)):
         done = False
         if activate[i] == 2: # 살아있는 것만
@@ -59,7 +70,6 @@ for turn in range(t):
                     break
 
     # print(monster)
-    # print(mWay)
     # print(activate)
 
     # pacman move
@@ -71,19 +81,29 @@ for turn in range(t):
             continue
         temp = countMonster((ax, ay))[0]
         for b in range(4):
-            bx, by = ax + pdx[b], ax + pdy[b]
+            bx, by = ax + pdx[b], ay + pdy[b]
             if not check((bx, by)):
                 continue
+            # if (bx, by) != (px, py):
+            #     temp += countMonster((bx, by))[0]
             temp += countMonster((bx, by))[0]
             for c in range(4):
-                cx, cy = bx + pdx[c], bx + pdy[c]
+                cx, cy = bx + pdx[c], by + pdy[c]
                 if not check((cx, cy)):
                     continue
-                temp += countMonster((cx, cy))[0]
+                if (cx, cy) not in [(ax, ay), (bx, by)]:
+                    temp += countMonster((cx, cy))[0]
+                # temp += countMonster((cx, cy))[0]
                 if temp > maxval:
                     maxval = temp
                     pMove = [a, b, c]
-                temp -= countMonster((cx, cy))[0]
+                if (cx, cy) not in [(ax, ay), (bx, by)]:
+                    temp -= countMonster((cx, cy))[0]
+                # if (cx, cy) != (px, py):
+                #     temp -= countMonster((cx, cy))[0]
+                # temp -= countMonster((cx, cy))[0]
+            # if (bx, by) != (px, py):
+            #     temp -= countMonster((bx, by))[0]
             temp -= countMonster((bx, by))[0]
 
     # print(pMove)
@@ -98,7 +118,6 @@ for turn in range(t):
     # print(px, py)
     
     # print(monster)
-    # print(mWay)
     # print(activate)
 
     # hatch and remain 
@@ -109,7 +128,6 @@ for turn in range(t):
             activate[i] += 1
 
     # print(monster)
-    # print(mWay)
     # print(activate)
 
 
