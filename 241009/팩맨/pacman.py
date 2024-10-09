@@ -5,9 +5,9 @@ def countMonster(node):
     cnt = 0
     where = []
     for i in range(len(monster)):
-        if monster[i] == node and activate[i] == 2:
+        if monster[i] == node:
             cnt += 1
-            where.append(i)
+            where.append(monster[i])
     return cnt, where
 
 def check(node):
@@ -20,11 +20,12 @@ px, py = map(int, input().split())
 
 monster = []
 mWay = []
-activate = []
 
-egg = set()
+egg = []
+eWay = []
 
-dead = set()
+dead = []
+dTime = []
 
 mdx = (-1, -1, 0, 1, 1, 1, 0, -1)
 mdy = (0, -1, -1, -1, 0, 1, 1, 1)
@@ -36,43 +37,33 @@ for i in range(m):
     monster.append((r, c))
     cBoard[r][c] += 1
     mWay.append(d-1)
-    activate.append(2) # live
-
 
 for turn in range(t):
+    # print(turn, 'turn')
     # print('turn',  turn)
     # egg
-        
     for i in range(len(monster)):
-        if activate[i] == 2:
-            monster.append(monster[i])
-            mWay.append(mWay[i])
-            activate.append(1) 
+        egg.append(monster[i])
+        eWay.append(mWay[i])
+
+    # print([row[1:] for row in cBoard[1:]])
+    # print(mWay)
+    # print(dead)
+    
 
     for i in range(len(monster)):
-        if activate[i] == 2: # 살아있는 것만
-            done = False
-            (x, y) = monster[i]
-            for d in range(8):
-                nx, ny = x + mdx[(mWay[i] + d) % 8], y + mdy[(mWay[i] + d) % 8]
-                if check((nx, ny)) and (nx, ny) != (px, py): # 안벗어났거나 팩맨 없음
-                    thereis = False
-                    for j in range(len(monster)): # 시체 없음
-                        if i != j: # 같은 놈은 고려 안하기
-                            if monster[j] == (nx, ny): # 이동 한 좌표 같은데서 
-                                if activate[j] < 0: # 좀비가 있으면
-                                    thereis = True
-                        # if not (i != j and monster[j] == (nx, ny) and activate[j] < 0 ):
-                        #     print(nx,ny)
-                    if not thereis:
-                        cBoard[monster[i][0]][monster[i][1]] -= 1
-                        monster[i] = (nx, ny)
-                        cBoard[nx][ny] += 1
-                        mWay[i] = (mWay[i] + d) % 8
-                        done = True
-
-                if done:
-                    break
+        (x, y) = monster[i]
+        for d in range(8):
+            nx, ny = x + mdx[(mWay[i] + d) % 8], y + mdy[(mWay[i] + d) % 8]
+            if check((nx, ny)) and (nx, ny) != (px, py) and (nx, ny) not in dead: # 안벗어났거나 팩맨 없음 시체없음
+                cBoard[x][y] -= 1
+                monster[i] = (nx, ny)
+                cBoard[nx][ny] += 1
+                mWay[i] = (mWay[i] + d) % 8
+                break
+    # print(mWay)
+    # print("AA")
+    # print([row[1:] for row in cBoard[1:]])
 
     maxval = -1
     pMove = [-1, -1, -1]
@@ -94,7 +85,6 @@ for turn in range(t):
                 if (cx, cy) != (ax, ay):
                     cc = cBoard[cx][cy]
                     temp += cc
-                # temp += countMonster((cx, cy))[0]
                 if temp > maxval:
                     maxval = temp
                     pMove = [a, b, c]
@@ -103,36 +93,44 @@ for turn in range(t):
             temp -= bb
 
     # print(pMove)
-
+    #kill
     for i in pMove:
         px += pdx[i]
         py += pdy[i]
         where = countMonster((px, py))[1]
-        for w in where:
-            activate[w] = -3
-            cBoard[monster[w][0]][monster[w][1]] -= 1
-    
+        for j in range(len(monster)-1, -1, -1):
+            if monster[j] == (px, py):
+                monster.pop(j)
+                mWay.pop(j)
+                cBoard[px][py] -= 1
+                dead.append((px, py))
+                dTime.append(-3)
 
-    # hatch and remain 
-    for i in range(len(monster)-1, -1, -1):
-        if activate[i] == 1:
-            activate[i] = 2
-            cBoard[monster[i][0]][monster[i][1]] += 1
-        elif activate[i] < 0: # 시체 생명
-            activate[i] += 1
-            if activate[i] == 0:
-                monster.pop(i)
-                activate.pop(i)
-                mWay.pop(i)
+    # print(egg)
+    # print([row[1:] for row in cBoard[1:]])
 
+    # print(px, py)
 
+    # hatch
+    monster += egg
+    mWay += eWay
+    for (x, y) in egg:
+        cBoard[x][y] += 1
+    egg = []
+    eWay = []
 
-answer = 0
-for i in activate:
-    if i == 2:
-        answer += 1
+    # trash
+    for i in range(len(dead)-1, -1, -1):
+        dTime[i] +=1
+        if dTime[i] == 0:
+            dTime.pop(i)
+            dead.pop(i)
 
-print(answer)
+    # print(dead)
+    # print(monster)
+    # print(mWay)
+
+print(len(monster))
 
 # a b c d e f g h
 
