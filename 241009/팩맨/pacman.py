@@ -1,3 +1,5 @@
+import copy
+
 pdx = (-1, 0, 1, 0)
 pdy = (0, -1, 0, 1)
 
@@ -9,52 +11,45 @@ def check(node):
 m, t = map(int, input().split())
 px, py = map(int, input().split())
 
-monster = []
-mWay = []
+monster = [[[] for _ in range(5)] for _ in range(5)]
 
-egg = []
-eWay = []
-
-dead = []
-dTime = []
+dead = [[[] for _ in range(5)] for _ in range(5)]
 
 
 mdx = (-1, -1, 0, 1, 1, 1, 0, -1)
 mdy = (0, -1, -1, -1, 0, 1, 1, 1)
 
-cBoard = [[0 for _ in range(5)] for _ in range(5)]
-dBoard = [[0 for _ in range(5)] for _ in range(5)]
-
 for i in range(m):
     r, c, d = map(int, input().split())
-    monster.append((r, c))
-    cBoard[r][c] += 1
-    mWay.append(d-1)
+    monster[r][c].append(d-1)
+    # cBoard[r][c] += 1
+    # mWay.append(d-1)
 
 for turn in range(t):
+    # print(turn, 'turn')
     # egg
-    for i in range(len(monster)):
-        egg.append(monster[i])
-        eWay.append(mWay[i])
+    egg = copy.deepcopy(monster)
+    egg = [[[] for _ in range(5)] for _ in range(5)]
+    for i in range(1, 5):
+        for j in range(1, 5):
+            egg[i][j] = monster[i][j][:]
 
-    # print([row[1:] for row in cBoard[1:]])
-    # print(mWay)
-    # print(dead)
-    
+    temp = [[[] for _ in range(5)] for _ in range(5)]
 
-    for i in range(len(monster)):
-        (x, y) = monster[i]
-        for d in range(8):
-            nx, ny = x + mdx[(mWay[i] + d) % 8], y + mdy[(mWay[i] + d) % 8]
-            if check((nx, ny)) and (nx, ny) != (px, py) and dBoard[nx][ny] == 0: # 안벗어났거나 팩맨 없음 시체없음
-                cBoard[x][y] -= 1
-                monster[i] = (nx, ny)
-                cBoard[nx][ny] += 1
-                mWay[i] = (mWay[i] + d) % 8
-                break
+    for i in range(1, 5):
+        for j in range(1, 5):
+            for k in range(len(monster[i][j])-1, -1, -1):
+                for d in range(8):
+                    nx, ny = i + mdx[(monster[i][j][k] + d) % 8], j + mdy[(monster[i][j][k] + d) % 8]
+                    if check((nx, ny)) and (nx, ny) != (px, py) and len(dead[nx][ny]) == 0: # 안벗어났거나 팩맨 없음 시체없음
+                        temp[nx][ny].append((monster[i][j][k] + d) % 8)
+                        monster[i][j].pop(k)
+                        break
+
+    for i in range(1, 5):
+        for j in range(1, 5):
+            monster[i][j] += temp[i][j]
     # print(mWay)
-    # print("AA")
-    # print([row[1:] for row in cBoard[1:]])
 
     maxval = -1
     pMove = [-1, -1, -1]
@@ -62,19 +57,19 @@ for turn in range(t):
         ax, ay = px + pdx[a], py + pdy[a]
         if not check((ax, ay)):
             continue
-        temp = cBoard[ax][ay]
+        temp = len(monster[ax][ay])
         for b in range(4):
             bx, by = ax + pdx[b], ay + pdy[b]
             if not check((bx, by)):
                 continue
-            bb = cBoard[bx][by]
+            bb = len(monster[bx][by])
             temp += bb
             for c in range(4):
                 cx, cy = bx + pdx[c], by + pdy[c]
                 if not check((cx, cy)):
                     continue
                 if (cx, cy) != (ax, ay):
-                    cc = cBoard[cx][cy]
+                    cc = len(monster[cx][cy])
                     temp += cc
                 if temp > maxval:
                     maxval = temp
@@ -88,38 +83,33 @@ for turn in range(t):
     for i in pMove:
         px += pdx[i]
         py += pdy[i]
-        for j in range(len(monster)-1, -1, -1):
-            if monster[j] == (px, py):
-                monster.pop(j)
-                mWay.pop(j)
-                cBoard[px][py] -= 1
-                dead.append((px, py))
-                dBoard[px][py] += 1
-                dTime.append(-3)
+        dead[px][py].extend([-3 for _ in range(len(monster[px][py]))])
+        monster[px][py] = []
 
     # print(egg)
     # print([row[1:] for row in cBoard[1:]])
 
     # print(px, py)
-
+    # print('egg', [row[1:] for row in egg[1:]])
     # hatch
-    monster += egg
-    mWay += eWay
-    for (x, y) in egg:
-        cBoard[x][y] += 1
-    egg = []
-    eWay = []
-
+    for i in range(1, 5):
+        for j in range(1, 5):
+            monster[i][j].extend(egg[i][j])
+        
     # trash
-    for i in range(len(dead)-1, -1, -1):
-        dTime[i] +=1
-        if dTime[i] == 0:
-            dTime.pop(i)
-            dBoard[dead[i][0]][dead[i][1]] -= 1
-            dead.pop(i)
+    for i in range(1, 5):
+        for j in range(1, 5):
+            for k in range(len(dead[i][j])-1, -1, -1):
+                dead[i][j][k] += 1
+                if dead[i][j][k] == 0:
+                    dead[i][j].pop(k)
 
-    # print(dead)
-    # print(monster)
-    # print(mWay)
+    # print([row[1:] for row in dead[1:]])
+    # print('.')
+    # print([row[1:] for row in monster[1:]])
+answer = 0
+for i in range(1, 5):
+    for j in range(1, 5):
+        answer += len(monster[i][j])
 
-print(len(monster))
+print(answer)
