@@ -1,15 +1,6 @@
 pdx = (-1, 0, 1, 0)
 pdy = (0, -1, 0, 1)
 
-def tcountMonster(node):
-    cnt = 0
-    where = []
-    for i in range(len(monster)):
-        if monster[i] == node and tActivate[i] == 2:
-            cnt += 1
-            where.append(i)
-    return cnt, where
-
 def countMonster(node):
     cnt = 0
     where = []
@@ -42,9 +33,6 @@ for i in range(m):
     activate.append(2) # live
 
 
-# print(monster)
-# print(activate)
-
 for turn in range(t):
     # print('turn',  turn)
     # egg
@@ -54,24 +42,39 @@ for turn in range(t):
             mWay.append(mWay[i])
             activate.append(1) 
     for i in range(len(monster)):
-        done = False
         if activate[i] == 2: # 살아있는 것만
+            done = False
             (x, y) = monster[i]
             for d in range(8):
                 nx, ny = x + mdx[(mWay[i] + d) % 8], y + mdy[(mWay[i] + d) % 8]
                 if check((nx, ny)) and (nx, ny) != (px, py): # 안벗어났거나 팩맨 없음
+                    thereis = False
                     for j in range(len(monster)): # 시체 없음
-                        if not (monster[j] == (nx, ny) and activate[j] < 0 ):
-                            monster[i] = (nx, ny)
-                            mWay[i] = (mWay[i] + d) % 8
-                            done = True
-                            break
+                        if i != j: # 같은 놈은 고려 안하기
+                            if monster[j] == (nx, ny): # 이동 한 좌표 같은데서 
+                                if activate[j] < 0: # 좀비가 있으면
+                                    thereis = True
+                        # if not (i != j and monster[j] == (nx, ny) and activate[j] < 0 ):
+                        #     print(nx,ny)
+                    if not thereis:
+                        monster[i] = (nx, ny)
+                        mWay[i] = (mWay[i] + d) % 8
+                        done = True
+
                 if done:
                     break
 
-    # print(monster)
-    # print(activate)
-
+    # xx = [[0 for _ in range(4)] for _ in range(4)]
+    # for i in range(len(monster)):
+    #     if activate[i] == 2:
+    #         xx[monster[i][0]-1][monster[i][1]-1] += 1
+    # print(xx)
+    # xx = [[0 for _ in range(4)] for _ in range(4)]
+    # print('--')
+    # for i in range(len(monster)):
+    #     if activate[i] < 0:
+    #         xx[monster[i][0]-1][monster[i][1]-1] += 1
+    # print(xx)
     # pacman move
     maxval = -1
     pMove = [-1, -1, -1]
@@ -91,13 +94,13 @@ for turn in range(t):
                 cx, cy = bx + pdx[c], by + pdy[c]
                 if not check((cx, cy)):
                     continue
-                if (cx, cy) not in [(ax, ay), (bx, by)]:
+                if (cx, cy) != (ax, ay):
                     temp += countMonster((cx, cy))[0]
                 # temp += countMonster((cx, cy))[0]
                 if temp > maxval:
                     maxval = temp
                     pMove = [a, b, c]
-                if (cx, cy) not in [(ax, ay), (bx, by)]:
+                if (cx, cy) != (ax, ay):
                     temp -= countMonster((cx, cy))[0]
                 # if (cx, cy) != (px, py):
                 #     temp -= countMonster((cx, cy))[0]
@@ -114,11 +117,7 @@ for turn in range(t):
         where = countMonster((px, py))[1]
         for w in where:
             activate[w] = -3
-
-    # print(px, py)
     
-    # print(monster)
-    # print(activate)
 
     # hatch and remain 
     for i in range(len(monster)):
@@ -127,8 +126,6 @@ for turn in range(t):
         elif activate[i] < 0: # 시체 생명
             activate[i] += 1
 
-    # print(monster)
-    # print(activate)
 
 
 answer = 0
@@ -137,3 +134,9 @@ for i in activate:
         answer += 1
 
 print(answer)
+
+# a b c d e f g h
+
+# h d c f b a e g
+
+# h d f g
