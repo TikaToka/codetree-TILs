@@ -56,17 +56,15 @@ while len(usedConvei) < m:
 # for l in range(5):
     fin = []
     for i in range(len(human)):
-        # 1
+    # 1
         if not done[i]:
             if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
                 routes[i] = bfs(human[i], convei[i])
             human[i] = routes[i][1]
             routes[i].pop(0)
-            # 2
+    # 2
             if human[i] == convei[i]:
                 fin.append(i)
-                
-    # 2
     for i in fin:
         usedConvei.add(convei[i])
         done[i] = True
@@ -75,6 +73,7 @@ while len(usedConvei) < m:
         mini = 3 * n
         target = ()
         x, y = convei[t-1]
+        opt = []
         for (a, b) in camp:
             if (a, b) in usedCamp:
                 continue
@@ -85,23 +84,23 @@ while len(usedConvei) < m:
             if dist < mini:
                 target = (a, b)
                 mini = dist
+                opt = temp
             elif dist == mini:
                 if a < target[0]:
                     target = (a, b)
+                    opt = temp
                 elif a == target[0]:
                     if b < target[0]:
                         target = (a, b)
+                        opt = temp
             
         human.append(target)
         usedCamp.add(target)
-        routes.append(temp)
-        # camp.remove(target)
+        routes.append(opt)
+
+        # print(human)
+        # print(routes)
 
     if len(usedConvei) < m:
         t += 1
-    # print(human)
-    # print(done)
-    # print(usedCamp)
-    # print(usedConvei)
-    # print('.')
 print(t)
