@@ -50,7 +50,7 @@ for i in range(m):
     x, y = map(int, input().split())
     convei.append((x-1, y-1))
 
-routes = [[] for _ in range(m)]
+routes = []
 t = 0
 while len(usedConvei) < m:
 # for l in range(5):
@@ -58,11 +58,8 @@ while len(usedConvei) < m:
     for i in range(len(human)):
         # 1
         if not done[i]:
-            if routes[i] == []:
+            if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
                 routes[i] = bfs(human[i], convei[i])
-            else:
-                if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
-                    routes[i] = bfs(human[i], convei[i])
             human[i] = routes[i][1]
             routes[i].pop(0)
             # 2
@@ -97,6 +94,7 @@ while len(usedConvei) < m:
             
         human.append(target)
         usedCamp.add(target)
+        routes.append(temp)
         # camp.remove(target)
 
     if len(usedConvei) < m:
