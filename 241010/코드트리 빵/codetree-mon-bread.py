@@ -1,3 +1,5 @@
+from collections import deque
+
 dx = (-1, 0, 0, 1)
 dy = (0, -1, 1, 0)
 
@@ -5,13 +7,13 @@ def check(n1):
     return 0<=n1[0]<n and 0<=n1[1]<n
 
 def bfs(start, end):
-    tovisit = []
+    tovisit = deque()
     visited = []
     tovisit.append(start)
     parent = {}
     parent[start] = None
     while tovisit:
-        node = tovisit.pop(0)
+        node = tovisit.popleft()
         visited.append(node)
         if node == end:
             output = [node]
