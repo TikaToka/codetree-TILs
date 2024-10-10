@@ -20,7 +20,7 @@ def bfs(start, end):
             while parent[node] != None:
                 output.append(parent[node])
                 node = parent[node]
-            return list(reversed(output))
+            return output[::-1]
         for d in range(4):
             nx, ny = node[0] + dx[d], node[1] + dy[d]
             if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in usedCamp and (nx, ny) not in usedConvei:
@@ -36,8 +36,8 @@ done = [False for _ in range(m)]
 convei = []
 camp = set()
 
-# conveiBoard = [[]]
-# campBoard = [[0 for _ in range(n)] for _ in range(n)]
+conveiBoard = [[]]
+campBoard = [[0 for _ in range(n)] for _ in range(n)]
 
 usedCamp = set()
 usedConvei = set()
@@ -45,7 +45,7 @@ usedConvei = set()
 for i in range(n):
     temp = input().split()
     for j in range(n):
-        # campBoard[i][j] = int(temp[j])
+        campBoard[i][j] = int(temp[j])
         if int(temp[j]) == 1:
             camp.add((i, j))
         
@@ -55,7 +55,7 @@ for i in range(m):
 
 t = 0
 while len(usedConvei) < m:
-    t += 1
+# for l in range(5):
     fin = []
     for i in range(len(human)):
         # 1
@@ -96,8 +96,8 @@ while len(usedConvei) < m:
         usedCamp.add(target)
         # camp.remove(target)
 
-    # if len(usedConvei) < m:
-    #     t += 1
+    if len(usedConvei) < m:
+        t += 1
     # print(human)
     # print(done)
     # print(usedCamp)
