@@ -21,7 +21,7 @@ def bfs(start, end):
             return list(reversed(output))
         for d in range(4):
             nx, ny = node[0] + dx[d], node[1] + dy[d]
-            if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in usedCamp and (nx, ny) not in usedConvei  and (nx, ny) not in tovisit:
+            if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in usedCamp and (nx, ny) not in usedConvei:
                 tovisit.append((nx, ny))
                 parent[(nx, ny)] = node
     return None
