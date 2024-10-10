@@ -8,13 +8,13 @@ def check(n1):
 
 def bfs(start, end):
     tovisit = deque()
-    visited = []
+    visited = set()
     tovisit.append(start)
     parent = {}
     parent[start] = None
     while tovisit:
         node = tovisit.popleft()
-        visited.append(node)
+        visited.add(node)
         if node == end:
             output = [node]
             while parent[node] != None:
