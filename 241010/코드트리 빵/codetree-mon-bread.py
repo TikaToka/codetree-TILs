@@ -20,7 +20,7 @@ def bfs(start, end):
             while parent[node] != None:
                 output.append(parent[node])
                 node = parent[node]
-            return output[::-1]
+            return list(reversed(output))
         for d in range(4):
             nx, ny = node[0] + dx[d], node[1] + dy[d]
             if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in usedCamp and (nx, ny) not in usedConvei:
@@ -36,16 +36,13 @@ done = [False for _ in range(m)]
 convei = []
 camp = set()
 
-conveiBoard = [[]]
-campBoard = [[0 for _ in range(n)] for _ in range(n)]
-
 usedCamp = set()
 usedConvei = set()
 
 for i in range(n):
     temp = input().split()
     for j in range(n):
-        campBoard[i][j] = int(temp[j])
+        # campBoard[i][j] = int(temp[j])
         if int(temp[j]) == 1:
             camp.add((i, j))
         
@@ -53,6 +50,7 @@ for i in range(m):
     x, y = map(int, input().split())
     convei.append((x-1, y-1))
 
+routes = [[] for _ in range(m)]
 t = 0
 while len(usedConvei) < m:
 # for l in range(5):
@@ -60,8 +58,13 @@ while len(usedConvei) < m:
     for i in range(len(human)):
         # 1
         if not done[i]:
-            route = bfs(human[i], convei[i])
-            human[i] = route[1]
+            if routes[i] == []:
+                routes[i] = bfs(human[i], convei[i])
+            else:
+                if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
+                    routes[i] = bfs(human[i], convei[i])
+            human[i] = routes[i][1]
+            routes[i].pop(0)
             # 2
             if human[i] == convei[i]:
                 fin.append(i)
