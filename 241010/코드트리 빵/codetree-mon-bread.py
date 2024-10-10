@@ -36,8 +36,8 @@ done = [False for _ in range(m)]
 convei = []
 camp = set()
 
-conveiBoard = [[]]
-campBoard = [[0 for _ in range(n)] for _ in range(n)]
+# conveiBoard = [[]]
+# campBoard = [[0 for _ in range(n)] for _ in range(n)]
 
 usedCamp = set()
 usedConvei = set()
@@ -45,7 +45,7 @@ usedConvei = set()
 for i in range(n):
     temp = input().split()
     for j in range(n):
-        campBoard[i][j] = int(temp[j])
+        # campBoard[i][j] = int(temp[j])
         if int(temp[j]) == 1:
             camp.add((i, j))
         
@@ -55,7 +55,7 @@ for i in range(m):
 
 t = 0
 while len(usedConvei) < m:
-# for l in range(5):
+    t += 1
     fin = []
     for i in range(len(human)):
         # 1
@@ -96,8 +96,8 @@ while len(usedConvei) < m:
         usedCamp.add(target)
         # camp.remove(target)
 
-    if len(usedConvei) < m:
-        t += 1
+    # if len(usedConvei) < m:
+    #     t += 1
     # print(human)
     # print(done)
     # print(usedCamp)
