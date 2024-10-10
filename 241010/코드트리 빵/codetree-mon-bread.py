@@ -52,15 +52,16 @@ for i in range(m):
 routes = []
 t = 0
 while len(usedConvei) < m:
-# for l in range(5):
     fin = []
     for i in range(len(human)):
     # 1
         if not done[i]:
-            for j in range(1, len(routes[i])):
-                if routes[i][j] in usedCamp or routes[i][j] in usedConvei:
-                    routes[i] = bfs(human[i], convei[i])
-                    break
+            # for j in range(1, len(routes[i])):
+            #     if routes[i][j] in usedCamp or routes[i][j] in usedConvei:
+            #         routes[i] = bfs(human[i], convei[i])
+            #         break
+            if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
+                routes[i] = bfs(human[i], convei[i])
             human[i] = routes[i][1]
             routes[i].pop(0)
     # 2
@@ -98,9 +99,6 @@ while len(usedConvei) < m:
         human.append(target)
         usedCamp.add(target)
         routes.append(opt)
-
-        # print(human)
-        # print(routes)
 
     if len(usedConvei) < m:
         t += 1
