@@ -42,7 +42,6 @@ usedConvei = set()
 for i in range(n):
     temp = input().split()
     for j in range(n):
-        # campBoard[i][j] = int(temp[j])
         if int(temp[j]) == 1:
             camp.add((i, j))
         
@@ -58,8 +57,10 @@ while len(usedConvei) < m:
     for i in range(len(human)):
     # 1
         if not done[i]:
-            if routes[i][1] in usedCamp or routes[i][1] in usedConvei:
-                routes[i] = bfs(human[i], convei[i])
+            for j in range(1, len(routes[i])):
+                if routes[i][j] in usedCamp or routes[i][j] in usedConvei:
+                    routes[i] = bfs(human[i], convei[i])
+                    break
             human[i] = routes[i][1]
             routes[i].pop(0)
     # 2
