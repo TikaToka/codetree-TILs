@@ -34,7 +34,10 @@ n, m = map(int, input().split())
 human = []
 done = [False for _ in range(m)]
 convei = []
-camp = []
+camp = set()
+
+conveiBoard = [[]]
+campBoard = [[0 for _ in range(n)] for _ in range(n)]
 
 usedCamp = set()
 usedConvei = set()
@@ -42,9 +45,9 @@ usedConvei = set()
 for i in range(n):
     temp = input().split()
     for j in range(n):
-        # board[i][j] = int(temp[j])
+        campBoard[i][j] = int(temp[j])
         if int(temp[j]) == 1:
-            camp.append((i, j))
+            camp.add((i, j))
         
 for i in range(m):
     x, y = map(int, input().split())
