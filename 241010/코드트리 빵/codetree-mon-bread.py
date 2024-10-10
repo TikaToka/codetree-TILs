@@ -88,7 +88,7 @@ while len(usedConvei) < m:
             
         human.append(target)
         usedCamp.add(target)
-        camp.remove(target)
+        # camp.remove(target)
     if len(usedConvei) < m:
         t += 1
     # print(human)
