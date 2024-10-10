@@ -63,10 +63,10 @@ while len(usedConvei) < m:
             if human[i] == convei[i]:
                 fin.append(i)
                 
-    # 2
-    for i in fin:
-        usedConvei.add(convei[i])
-        done[i] = True
+    # # 2
+    # for i in fin:
+    #     usedConvei.add(convei[i])
+    #     done[i] = True
     # 3
     if 1 <= t <= m:
         mini = 3 * n
@@ -89,6 +89,12 @@ while len(usedConvei) < m:
         human.append(target)
         usedCamp.add(target)
         # camp.remove(target)
+
+    # 2
+    for i in fin:
+        usedConvei.add(convei[i])
+        done[i] = True
+        
     if len(usedConvei) < m:
         t += 1
     # print(human)
