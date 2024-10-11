@@ -15,9 +15,7 @@ def check(node):
 def dfs(board, start):
     tovisit = []
     visited = []
-    parent = {}
     tovisit.append(start)
-    parent[start] = None
     while tovisit:
         node = tovisit.pop()
         visited.append(node)
@@ -26,9 +24,12 @@ def dfs(board, start):
             return visited
         for d in range(4):
             nx, ny = x + dx[d], y + dy[d]
-            if check((nx, ny)) and board[nx][ny] in [2, 3] and (nx, ny) not in visited and (nx, ny) not in tovisit:
-                tovisit.append((nx, ny))
-                parent[(nx, ny)] = (x, y)
+            if board[x][y] == 1:
+                if check((nx, ny)) and board[nx][ny] == 2 and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                    tovisit.append((nx, ny))
+            elif board[x][y] == 2:
+                if check((nx, ny)) and board[nx][ny] in [2, 3] and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                    tovisit.append((nx, ny))
     return None
 
 
@@ -68,14 +69,14 @@ for turn in range(k):
         first = info[i][0]
         for d in range(4):
             nx, ny = first[0] + dx[d], first[1] + dy[d]
-            if check((nx, ny)) and board[nx][ny] in [3,4]:
-                cand[board[nx][ny]] = (nx, ny)
+            if check((nx, ny)):
+                if board[nx][ny] in [3,4]:
+                    cand[board[nx][ny]] = (nx, ny)
 
         nInfo = info[i][:]
 
         for j in range(1, len(nInfo)):
             nInfo[j] = info[i][j-1]
-
 
         if 3 in cand.keys():
             nInfo[0] = cand[3]
@@ -87,7 +88,7 @@ for turn in range(k):
 
         board[nInfo[-1][0]][nInfo[-1][1]] = 3
         board[nInfo[0][0]][nInfo[0][1]] = 1
-        
+
 
         info[i] = nInfo[:]
 
@@ -112,7 +113,10 @@ for turn in range(k):
         # change order
         else:
             info[team_idx] = info[team_idx][::-1]
+            board[info[team_idx][0][0]][info[team_idx][0][1]] = 1
+            board[info[team_idx][-1][0]][info[team_idx][-1][1]] = 3
             break
+
         
 
 print(sum(point))
