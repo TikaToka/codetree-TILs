@@ -65,27 +65,25 @@ for turn in range(k):
     # people move
     for i in range(len(info)):
         # 마지막 사람 갈곳 먼저 저장
-        last = info[i][-1]
+        cand = {}
+        first = info[i][0]
         for d in range(4):
-            nx, ny = last[0] + dx[d], last[1] + dy[d]
-            if check((nx, ny)) and board[nx][ny] == 2:
-                lastmove = (nx, ny)
-                break
-        for j in range(len(info[i])-1):
-            for d in range(4):
-                nx, ny = info[i][j][0] + dx[d], info[i][j][1] + dy[d]
-                if check((nx, ny)) and board[nx][ny] == 4:
-                    board[info[i][j][0]][info[i][j][1]] = 4
-                    info[i][j] = (nx, ny)
-                    if j == 0:
-                        board[nx][ny] = 1
-                    else:
-                        board[nx][ny] = 2
-                    break
-        board[last[0]][last[1]] = 4
-        info[i][-1] = lastmove
-        board[lastmove[0]][lastmove[1]] = 3
+            nx, ny = first[0] + dx[d], first[1] + dy[d]
+            if check((nx, ny)) and board[nx][ny] in [3,4]:
+                cand[board[nx][ny]] = (nx, ny)
 
+        nInfo = info[i][:]
+        for j in range(1, len(nInfo)):
+            nInfo[j] = info[i][j-1]
+
+        if 3 in cand.keys():
+            nInfo[0] = cand[3]
+        else:
+            nInfo[0] = cand[4]
+        
+        info[i] = nInfo[:]
+
+    # print(info)
 
     # 공 주고 점수
     while check(ball):
