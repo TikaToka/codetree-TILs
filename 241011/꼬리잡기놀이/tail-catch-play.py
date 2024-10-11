@@ -1,7 +1,6 @@
 n, m, k = map(int, input().split())
 
 board = [[0 for _ in range(n)] for _ in range(n)]
-way = [[0 for _ in range(n)] for _ in range(n)]
 
 point = []
 info = []
@@ -73,6 +72,7 @@ for turn in range(k):
                 cand[board[nx][ny]] = (nx, ny)
 
         nInfo = info[i][:]
+
         for j in range(1, len(nInfo)):
             nInfo[j] = info[i][j-1]
 
@@ -82,16 +82,12 @@ for turn in range(k):
         else:
             nInfo[0] = cand[4]
 
-        for j in info[i]:
-            board[j[0]][j[1]] = 4
+        board[info[i][-1][0]][info[i][-1][1]] = 4
+        board[info[i][0][0]][info[i][0][1]] = 2
 
-        for idx, k in enumerate(nInfo):
-            if idx == 0:
-                board[k[0]][k[1]] = 1
-            elif idx == len(nInfo)-1:
-                board[k[0]][k[1]] = 3
-            else:
-                board[k[0]][k[1]] = 2
+        board[nInfo[-1][0]][nInfo[-1][1]] = 3
+        board[nInfo[0][0]][nInfo[0][1]] = 1
+        
 
         info[i] = nInfo[:]
 
