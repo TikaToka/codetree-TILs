@@ -49,7 +49,7 @@ for time in range(k):
                         for k in [1, 3, 5, 7]:
                             board[i][j].append([a//5, b//s, k])
 
-    print(board)
+    # print(board)
 
 answer = 0
 for i in range(n):
