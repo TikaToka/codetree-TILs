@@ -21,7 +21,7 @@ for time in range(k):
                 nBoard[nx][ny].append(temp)
     board = [row[:] for row in nBoard]
 
-
+    # print(board)
     for i in range(n):
         for j in range(n):
             if len(board[i][j]) >= 2:
@@ -54,5 +54,6 @@ for time in range(k):
 answer = 0
 for i in range(n):
     for j in range(n):
-        answer += len(board[i][j])
+        for k in range(len(board[i][j])):
+            answer += board[i][j][k][0]
 print(answer)
