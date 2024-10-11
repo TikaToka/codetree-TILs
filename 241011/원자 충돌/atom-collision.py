@@ -15,9 +15,9 @@ for time in range(k):
     nBoard = [[[] for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            for k in range(len(board[i][j])-1, -1, -1):
+            for k in range(len(board[i][j])):
                 temp = board[i][j][k]
-                nx, ny = (i + dx[temp[2]] * temp[1])%4, (j + dy[temp[2]] * temp[1])%4
+                nx, ny = (i + dx[temp[2]] * temp[1])%n, (j + dy[temp[2]] * temp[1])%n
                 nBoard[nx][ny].append(temp)
     board = [row[:] for row in nBoard]
 
@@ -45,7 +45,7 @@ for time in range(k):
                     if c == 0:
                         for k in [0, 2, 4, 6]:
                             board[i][j].append([a//5, b//s, k])
-                    else:
+                    elif c == 1:
                         for k in [1, 3, 5, 7]:
                             board[i][j].append([a//5, b//s, k])
 
