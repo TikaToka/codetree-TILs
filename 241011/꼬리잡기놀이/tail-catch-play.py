@@ -64,7 +64,7 @@ for turn in range(k):
 
     # people move
     for i in range(len(info)):
-        # 마지막 사람 갈곳 먼저 저장
+        # 처음 갈사람은 고려가 필요함
         cand = {}
         first = info[i][0]
         for d in range(4):
@@ -76,11 +76,23 @@ for turn in range(k):
         for j in range(1, len(nInfo)):
             nInfo[j] = info[i][j-1]
 
+
         if 3 in cand.keys():
             nInfo[0] = cand[3]
         else:
             nInfo[0] = cand[4]
-        
+
+        for j in info[i]:
+            board[j[0]][j[1]] = 4
+
+        for idx, k in enumerate(nInfo):
+            if idx == 0:
+                board[k[0]][k[1]] = 1
+            elif idx == len(nInfo)-1:
+                board[k[0]][k[1]] = 3
+            else:
+                board[k[0]][k[1]] = 2
+
         info[i] = nInfo[:]
 
     # print(info)
