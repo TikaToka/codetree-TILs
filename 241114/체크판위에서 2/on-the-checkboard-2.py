@@ -6,6 +6,8 @@ def backtracking(curr, n):
             return
     elif curr[0] >= r or curr[1] >= c:
         return
+    elif n > 3:
+        return
     for i in range(curr[0]+1, r):
         for j in range(curr[1]+1, c):
             if board[i][j] != board[curr[0]][curr[1]]:
