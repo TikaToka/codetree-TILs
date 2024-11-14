@@ -9,7 +9,7 @@ for i in range(N):
     x, y = map(int, input().split())
     ckpt.append((x, y))
 
-answer = 10000
+answer = 99999999999999999999
 
 for i in range(1, N-1):
     temp = ckpt[:]
