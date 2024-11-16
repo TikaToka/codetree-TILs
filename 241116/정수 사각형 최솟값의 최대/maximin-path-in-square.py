@@ -16,4 +16,5 @@ for i in range(1, n):
 if dp[n-1][n-1] < board[n-1][n-1]:
     dp[n-1][n-1] = max(dp[n-2][n-1], dp[n-1][n-2])
 
-print(dp)
+print(dp[n-1][n-1])
+# print(dp)
