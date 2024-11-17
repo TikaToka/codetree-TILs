@@ -11,7 +11,7 @@ for i in range(1, n):
 
 for i in range(1, n):
     for j in range(1, n):
-        dp[n-1][n-1] = max(dp[n-2][n-1], dp[n-1][n-2])
+        dp[n-1][n-1] = min(max(dp[n-2][n-1], dp[n-1][n-2]), board[i][j])
 
 
 print(dp[n-1][n-1])
