@@ -5,7 +5,7 @@ board = [[x for x in map(int, input().split())] for _ in range(n)]
 dp = [x[2] for x in board]
 
 
-board.sort(key=lambda x: x[1])
+# board.sort(key=lambda x: x[1])
 
 
 answer = 0
