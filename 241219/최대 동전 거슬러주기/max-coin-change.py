@@ -13,8 +13,6 @@ for i in range(m+1):
                 continue
             dp[i] = max(dp[i], dp[i - coin[j]] + 1)
 
-print(dp)
-
 
 if dp[m] == -999:
     print(-1)
