@@ -10,7 +10,7 @@ for i in range(n):
     board.append((a, b))
 
 
-board.sort(key=lambda x: x[0])
+board.sort(key=lambda x: x[1])
 
 
 for i in range(1, n):
