@@ -6,11 +6,10 @@ dp = [10001 for _ in range(m+1)]
 dp[0] = 0
 
 for j in range(len(nums)):
-    for i in range(1, m+1):
+    for i in range(m, -1, -1):
             if i >= nums[j]:
                 dp[i] = min(dp[i-nums[j]]+1, dp[i])
 
-print(dp)
 
 
 if dp[m] == 10001:
