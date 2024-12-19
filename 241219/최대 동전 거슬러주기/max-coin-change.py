@@ -12,5 +12,8 @@ for i in range(m+1):
             dp[i] = max(dp[i], dp[i - coin[j]] + 1)
 
 
-print(dp[m])
+if dp[m] == 0:
+    print(-1)
+else:
+    print(dp[m])
 
