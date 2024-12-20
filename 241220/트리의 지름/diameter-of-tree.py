@@ -25,20 +25,20 @@ traversal(1)
 def dfs(start):
     maxval = 0
     maxidx = start
-    visited = []
+    visited = [False] * (n+1)
     tovisit = [(start, 0)]
     while tovisit:
         (node, w) = tovisit.pop()
-        visited.append(node)
+        visited[node] = True
         if w > maxval:
             maxval = w
             maxidx = node
         if parent[node] != ():
             i = parent[node]
-            if i[0] not in visited and i[0] not in tovisit:
+            if not visited[i[0]] and i[0] not in tovisit:
                 tovisit.append((i[0], w+i[1]))
         for i in edges[node]:
-            if i[0] not in visited and i[0] not in tovisit:
+            if not visited[i[0]] and i[0] not in tovisit:
                     tovisit.append((i[0], w+i[1]))
 
     return maxidx, maxval
