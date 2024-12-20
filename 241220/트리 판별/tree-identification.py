@@ -23,15 +23,19 @@ dfs(1)
 edges = [[] for _ in range(10001)]
 
 for i in range(1, len(parent)):
-    edges[parent[i]].append(i)
+    if parent[i] != 0:
+        edges[parent[i]].append(i)
 
 visited = [False] * (10001)
 
+cnt = 0
 def dfs(x):
-    visited[x] = True
+    global cnt
     tovisit = [x]
     while tovisit:
+        cnt += 1
         x = tovisit.pop()
+        visited[x] = True
         for y in edges[x]:
             if visited[y]:
                 return 0
@@ -39,4 +43,11 @@ def dfs(x):
                 tovisit.append(y)
     return 1
 
-print(dfs(1))
+
+if dfs(1):
+    if cnt == m:
+        print(1)
+    else:
+        print(0)
+else:
+    print(0)
