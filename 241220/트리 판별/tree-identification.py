@@ -45,7 +45,7 @@ def dfs(x):
 
 
 if dfs(1):
-    if cnt == m:
+    if cnt == m+1:
         print(1)
     else:
         print(0)
