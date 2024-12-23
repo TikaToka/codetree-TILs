@@ -13,4 +13,4 @@ for i in range(len(nums)):
 for i in range(1, n-1):
     dp[i] = abs(total - 2 * dp[i])
 
-print(min(dp[1:n]))
+print(min(dp[1:n+1]))
