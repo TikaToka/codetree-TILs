@@ -7,8 +7,8 @@ dp = [[0 for _ in range(4)] for _ in range(n+1)]
 
 dp[1][1] = coins[1]
 
-for j in range(0, 4):   
-    for i in range(2, n+1):
+for i in range(2, n+1):
+    for j in range(0, 4):   
         if j >= 1:
             dp[i][j] = max(dp[i][j], dp[i-2][j] + coins[i], dp[i-1][j-1] + coins[i]) # 2
         else:
