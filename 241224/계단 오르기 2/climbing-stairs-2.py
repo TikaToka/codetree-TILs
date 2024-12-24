@@ -13,7 +13,7 @@ for j in range(0, 4):
             dp[i][j] = max(dp[i][j], dp[i-2][j] + coins[i], dp[i-1][j-1] + coins[i]) # 2
         else:
             dp[i][j] = max(dp[i][j], dp[i-2][j] + coins[i])
-print(dp)
+# print(dp)
         
 
 maxval = 0
