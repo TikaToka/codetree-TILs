@@ -5,7 +5,7 @@ coins += list(map(int, input().split()))
 
 dp = [[0 for _ in range(4)] for _ in range(n+1)]
 
-dp[1][1] = 1
+dp[1][1] = coins[1]
 
 for j in range(0, 4):   
     for i in range(2, n+1):
