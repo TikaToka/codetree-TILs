@@ -17,8 +17,6 @@ for i in range(1, N):
                 if temp >= -20:
                     dp[i][j] = temp
 
-print(dp)
-
 answer = 0
 for i in range(2**(N-1)):
     if dp[N-1][i] == M:
