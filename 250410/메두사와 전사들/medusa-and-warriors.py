@@ -126,15 +126,16 @@ def stone_area(start, warrior, waypoint):
 
 def killall(start, waypoint):
     tovisit = deque([start])
-    visited = set()
+    visited = set(start)
     while tovisit:
         curr = tovisit.popleft()
         visited.add(curr)
         for idx, way in enumerate(waypoint):
             nx = curr[0] + way[0]
             ny = curr[1] + way[1]
-            if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+            if check((nx, ny)) and (nx, ny) not in visited:
                 tovisit.append((nx, ny))
+                visited.add((nx, ny))
     visited.remove(start)
     return visited
 
