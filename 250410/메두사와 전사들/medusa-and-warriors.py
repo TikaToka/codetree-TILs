@@ -186,6 +186,7 @@ else:
                 stoned += 1
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
+            poped = False
             if status[i]:
                 temp = bfs_warrior1(board, warrior[i], (sr, sc), area)
                 if temp != None:
@@ -194,22 +195,35 @@ else:
                         attack += 1
                         warrior.pop(i)
                         status.pop(i)
+                        poped =True
                     else:
                         warrior[i] = temp
                     movement += 1
-        # 전사들의 이동 좌우상하
-        for i in range(len(warrior)-1, -1, -1):
-            if status[i]:
-                temp = bfs_warrior2(board, warrior[i], (sr, sc), area)
-                if temp != None:
-                    # 겹치면 공격 ㄱㄱ
-                    if temp == (sr, sc):
-                        attack += 1
-                        warrior.pop(i)
-                        status.pop(i)
-                    else:
-                        warrior[i] = temp
-                    movement += 1
+            if not poped:
+                if status[i]:
+                    temp = bfs_warrior2(board, warrior[i], (sr, sc), area)
+                    if temp != None:
+                        # 겹치면 공격 ㄱㄱ
+                        if temp == (sr, sc):
+                            attack += 1
+                            warrior.pop(i)
+                            status.pop(i)
+                        else:
+                            warrior[i] = temp
+                        movement += 1
+        # # 전사들의 이동 좌우상하
+        # for i in range(len(warrior)-1, -1, -1):
+        #     if status[i]:
+        #             temp = bfs_warrior2(board, warrior[i], (sr, sc), area)
+        #             if temp != None:
+        #                 # 겹치면 공격 ㄱㄱ
+        #                 if temp == (sr, sc):
+        #                     attack += 1
+        #                     warrior.pop(i)
+        #                     status.pop(i)
+        #                 else:
+        #                     warrior[i] = temp
+        #                 movement += 1
         # # 전사들의 공격 (같은 칸에 메두사 있으면 공격 후 전사 사라짐)
         # for m in range(len(warrior)-1, -1, -1):
         #     if warrior[m] == (sr, sc):
