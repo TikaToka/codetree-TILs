@@ -223,8 +223,8 @@ def stone_area(start, warrior):
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
     for i in range(y+1, N):
-        left = max(x - (y - i), 0)
-        right = min(N-1, x + (y-i))
+        left = max(x - (i - y), 0)
+        right = min(N-1, x + (i-y))
         for j in range(left, right + 1):
             sight_map[j][i] = 1
 
@@ -239,7 +239,7 @@ def stone_area(start, warrior):
             thereis = True
 
     for i in range(y+1, N-1):
-        left = max(x - (i-y), 0)
+        left = max(x - (i - y), 0)
         right = min(N-1, x + (i-y))
 
         for j in range(left, x):
@@ -260,8 +260,8 @@ def stone_area(start, warrior):
 
     coverage = set()
     for i in range(y + 1, N):
-        left = max(0, x - (i - y))
-        right = min(N - 1, x + (i - y))
+        left = max(x - (i - y), 0)
+        right = min(N-1, x + (i-y))
         for j in range(left, right + 1):
             if sight_map[j][i]:
                 for idx in range(len(warrior)):
