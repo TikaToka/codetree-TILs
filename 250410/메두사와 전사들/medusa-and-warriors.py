@@ -76,11 +76,30 @@ def stone_area(start, warrior, waypoint):
                     stoned.add(i)
                     nowarrior = False
             if nowarrior:
-                for idx, way in enumerate(waypoint[d]):
-                    nx = curr[0] + way[0]
-                    ny = curr[1] + way[1]
-                    if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
-                        tovisit.append(((nx, ny), idx))
+                if idv == -1:
+                    for idx, way in enumerate(waypoint[d]):
+                        nx = curr[0] + way[0]
+                        ny = curr[1] + way[1]
+                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                            tovisit.append(((nx, ny), idx))
+                elif idv == 0:
+                    for idx, way in enumerate(waypoint[d][:2]):
+                        nx = curr[0] + way[0]
+                        ny = curr[1] + way[1]
+                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                            tovisit.append(((nx, ny), idv))
+                elif idv == 1:
+                    for idx, way in enumerate([waypoint[d][1]]):
+                        nx = curr[0] + way[0]
+                        ny = curr[1] + way[1]
+                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                            tovisit.append(((nx, ny), idv))
+                elif idv == 2:
+                    for idx, way in enumerate(waypoint[d][1:]):
+                        nx = curr[0] + way[0]
+                        ny = curr[1] + way[1]
+                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                            tovisit.append(((nx, ny), idv))
             else:
                 if idv == 0:
                     output = killall(curr, waypoint[d][:2])
@@ -91,7 +110,11 @@ def stone_area(start, warrior, waypoint):
                 else:
                     output = killall(curr, waypoint[d][1:])
                     nogo = nogo|output
+
         visited.remove(start)
+        for i in range(len(warrior)):
+            if i in stoned and warrior[i] in nogo:
+                stoned.remove(i)
         visited -= nogo
         if len(max_stoned) <= len(stoned):
             output_view = visited
@@ -161,7 +184,6 @@ else:
             for idx in stone:
                 status[idx] = 0
                 stoned += 1
-
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
             if status[i]:
