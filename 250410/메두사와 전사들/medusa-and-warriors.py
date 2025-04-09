@@ -70,7 +70,7 @@ def stone_area(start, warrior, waypoint):
         nogo = set()
         while tovisit:
             curr, idv = tovisit.popleft()
-            visited.add(curr)
+            # visited.add(curr)
             nowarrior = True
             for i in range(len(warrior)):
                 if curr == warrior[i]:
@@ -81,26 +81,30 @@ def stone_area(start, warrior, waypoint):
                     for idx, way in enumerate(waypoint[d]):
                         nx = curr[0] + way[0]
                         ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                        if check((nx, ny)) and (nx, ny) not in tovisit:
                             tovisit.append(((nx, ny), idx))
+                            visited.add((nx, ny))
                 elif idv == 0:
                     for idx, way in enumerate(waypoint[d][:2]):
                         nx = curr[0] + way[0]
                         ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                        if check((nx, ny)) and (nx, ny) not in tovisit:
                             tovisit.append(((nx, ny), idv))
+                            visited.add((nx, ny))
                 elif idv == 1:
                     for idx, way in enumerate([waypoint[d][1]]):
                         nx = curr[0] + way[0]
                         ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                        if check((nx, ny)) and (nx, ny) not in tovisit:
                             tovisit.append(((nx, ny), idv))
+                            visited.add((nx, ny))
                 elif idv == 2:
                     for idx, way in enumerate(waypoint[d][1:]):
                         nx = curr[0] + way[0]
                         ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit:
+                        if check((nx, ny)) and (nx, ny) not in tovisit:
                             tovisit.append(((nx, ny), idv))
+                            visited.add((nx, ny))
             else:
                 if idv == 0:
                     output = killall(curr, waypoint[d][:2])
@@ -112,7 +116,7 @@ def stone_area(start, warrior, waypoint):
                     output = killall(curr, waypoint[d][1:])
                     nogo = nogo|output
 
-        visited.remove(start)
+        # visited.remove(start)
         for i in range(len(warrior)):
             if i in stoned and warrior[i] in nogo:
                 stoned.remove(i)
