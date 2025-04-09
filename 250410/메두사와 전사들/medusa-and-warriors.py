@@ -9,18 +9,19 @@ def bfs(board, start, end):
     dx = (-1, 1, 0, 0)
     dy = (0, 0, -1, 1)
     tovisit = deque([(start, [start])])
-    visited = set()
+    visited = set(start)
     while tovisit:
         curr, path = tovisit.popleft()
-        visited.add(curr)
+        # visited.add(curr)
         if curr == (er, ec):
             return path
         (x, y) = curr
         for d in range(4):
             nx = x + dx[d]
             ny = y + dy[d]
-            if check((nx, ny)) and (nx, ny) not in visited and (nx, ny) not in tovisit and (board[nx][ny] == 0 or (nx, ny) == (er, ec)):
+            if check((nx, ny)) and (nx, ny) not in visited and (board[nx][ny] == 0 or (nx, ny) == (er, ec)): # 
                 tovisit.append(((nx, ny), path + [(nx, ny)]))
+                visited.add((nx, ny))
     return []
 
 
@@ -168,15 +169,18 @@ else:
         
         # 메두사 이동 (메두사가 이동한 칸에 전사가 았으면 사라짐. 최단경로 상 하 좌 우, 경로가 없을수도)
         (sr, sc) = route[cnt]
-        for i in range(len(warrior)-1, -1, -1):
-            if warrior[i] == (sr, sc):
-                warrior.pop(i)
-                status.pop(i)
 
         # 도착 확인
         if (sr, sc) == (er, ec):
             print(0)
             break
+
+        for i in range(len(warrior)-1, -1, -1):
+            if warrior[i] == (sr, sc):
+                warrior.pop(i)
+                status.pop(i)
+
+
 
         # 시선 (상하좌우, 90도 시야각)
         if len(warrior) > 0: 
