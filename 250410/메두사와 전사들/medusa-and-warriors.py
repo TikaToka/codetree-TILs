@@ -37,7 +37,7 @@ def bfs_warrior1(board, start, end, area):
     for d in range(3, -1, -1):
         nx = x + dx[d]
         ny = y + dy[d]
-        if check((nx, ny)) and (nx, ny) not in area:
+        if check((nx, ny)) and area[nx][ny] != 1:
             if distance((nx, ny), end) <= dist:
                 dist = distance((nx,ny), end)
                 cand = (nx, ny)
@@ -53,84 +53,298 @@ def bfs_warrior2(board, start, end, area):
     for d in range(3, -1, -1):
         nx = x + dx[d]
         ny = y + dy[d]
-        if check((nx, ny)) and (nx, ny) not in area:
+        if check((nx, ny)) and area[nx][ny] != 1:
             if distance((nx, ny), end) <= dist:
                 dist = distance((nx,ny), end)
                 cand = (nx, ny)
     return cand
 
 
-def stone_area(start, warrior, waypoint):
-    output_view = set()
-    max_stoned = set()
-    for d in range(len(waypoint)-1, -1, -1):
-        tovisit = deque([(start, -1)])
-        visited = set()
-        stoned = set()
-        nogo = set()
-        while tovisit:
-            curr, idv = tovisit.popleft()
-            # visited.add(curr)
-            nowarrior = True
-            for i in range(len(warrior)):
-                if curr == warrior[i]:
-                    stoned.add(i)
-                    nowarrior = False
-            if nowarrior:
-                if idv == -1:
-                    for idx, way in enumerate(waypoint[d]):
-                        nx = curr[0] + way[0]
-                        ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in tovisit:
-                            tovisit.append(((nx, ny), idx))
-                            visited.add((nx, ny))
-                elif idv == 0:
-                    for idx, way in enumerate(waypoint[d][:2]):
-                        nx = curr[0] + way[0]
-                        ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in tovisit:
-                            tovisit.append(((nx, ny), idv))
-                            visited.add((nx, ny))
-                elif idv == 1:
-                    for idx, way in enumerate([waypoint[d][1]]):
-                        nx = curr[0] + way[0]
-                        ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in tovisit:
-                            tovisit.append(((nx, ny), idv))
-                            visited.add((nx, ny))
-                elif idv == 2:
-                    for idx, way in enumerate(waypoint[d][1:]):
-                        nx = curr[0] + way[0]
-                        ny = curr[1] + way[1]
-                        if check((nx, ny)) and (nx, ny) not in tovisit:
-                            tovisit.append(((nx, ny), idv))
-                            visited.add((nx, ny))
-            else:
-                if idv == 0:
-                    output = killall(curr, waypoint[d][:2])
-                    nogo = nogo|output
-                elif idv == 1:
-                    output = killall(curr, [waypoint[d][1]])
-                    nogo = nogo|output
-                else:
-                    output = killall(curr, waypoint[d][1:])
-                    nogo = nogo|output
+def stone_area(start, warrior):
+    stone = set()
+    output = None
+    N = n
+    sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
-        # visited.remove(start)
-        for i in range(len(warrior)):
-            if i in stoned and warrior[i] in nogo:
-                stoned.remove(i)
-        visited -= nogo
-        if len(max_stoned) <= len(stoned):
-            output_view = visited
-            max_stoned = stoned
+    x, y = start
+
+    for i in range(x-1, -1, -1):
+        left = max(0, y - (x - i))
+        right = min(N-1, y + (x - i))
+        for j in range(left, right + 1):
+            sight_map[i][j] = 1
+
+    thereis = False
+    for i in range(x-1, -1, -1):
+        if thereis:
+            sight_map[i][y] = 0
+        else:
+            sight_map[i][y] = 1
+
+        if (i, y) in warrior:
+            thereis = True
+
+    for i in range(x-1, 0, -1):
+        left = max(0, y - (x - i))
+        right = min(N-1, y + (x - i))
+        for j in range(left, y):
+            if not sight_map[i][j] or (i, j) in warrior:
+                
+                if j > 0:
+                    sight_map[i-1][j-1] = 0
+                
+                sight_map[i-1][j] = 0
+
+        for j in range(y+1, right):
+            if not sight_map[i][j] or (i, j) in warrior:
+
+                if j < n - 1:
+                    sight_map[i-1][j+1] = 0
+
+                sight_map[i-1][j] = 0
+
+    coverage = set()
+    for i in range(x - 1, -1, -1):
+        left = max(0, y - (x - i))
+        right = min(N - 1, y + (x - i))
+        for j in range(left, right + 1):
+            if sight_map[i][j]:
+                for idx in range(len(warrior)):
+                    if warrior[idx] == (i, j):
+                        coverage.add(idx)
+
+    if len(stone) < len(coverage):
+        stone = coverage
+        output = sight_map
+###########################################
+    sight_map = [[0 for _ in range(N)] for _ in range(N)]
+
+    for i in range(x+1, n):
+        left = max(0, y - (i - x))
+        right = min(N-1, y + (i - x))
+        for j in range(left, right + 1):
+            sight_map[i][j] = 1
+
+    thereis = False
+    for i in range(x+1, N):
+        if thereis:
+            sight_map[i][y] = 0
+        else:
+            sight_map[i][y] = 1
+
+        if (i, y) in warrior:
+            thereis = True
+
+    for i in range(x+1, N-1):
+        left = max(0, y - (i - x))
+        right = min(N-1, y + (i - x))
+        for j in range(left, y):
+            if not sight_map[i][j] or (i, j) in warrior:
+                
+                if j > 0:
+                    sight_map[i+1][j-1] = 0
+                
+                sight_map[i+1][j] = 0
+
+        for j in range(y+1, right+1):
+            if not sight_map[i][j] or (i, j) in warrior:
+
+                if j < n - 1:
+                    sight_map[i+1][j+1] = 0
+
+                sight_map[i+1][j] = 0
+
+    coverage = set()
+    for i in range(x + 1, N):
+        left = max(0, y - (i - x))
+        right = min(N-1, y + (i - x))
+        for j in range(left, right + 1):
+            if sight_map[i][j]:
+                for idx in range(len(warrior)):
+                    if warrior[idx] == (i, j):
+                        coverage.add(idx)
+
+    if len(stone) < len(coverage):
+        stone = coverage
+        output = sight_map
+    ########################
+    sight_map = [[0 for _ in range(N)] for _ in range(N)]
+
+    for i in range(y-1, -1, -1):
+        left = max(x - (y - i), 0)
+        right = min(N-1, x + (y-i))
+        for j in range(left, right + 1):
+            sight_map[j][i] = 1
+
+    thereis = False
+    for i in range(y-1, -1, -1):
+        if thereis:
+            sight_map[x][i] = 0
+        else:
+            sight_map[x][i] = 1
+
+        if (x, i) in warrior:
+            thereis = True
+
+    for i in range(y-1, 0, -1):
+        left = max(x - (y - i), 0)
+        right = min(N-1, x + (y-i))
+
+        for j in range(left, x):
+            if not sight_map[j][i] or (j, i) in warrior:
+                
+                if j > 0:
+                    sight_map[j-1][i-1] = 0
+                
+                sight_map[j][i-1] = 0
+
+        for j in range(x + 1, right + 1):
+            if not sight_map[j][i] or (j, i) in warrior:
+
+                if j < n - 1:
+                    sight_map[j+1][i-1] = 0
+
+                sight_map[j][i-1] = 0
+
+    coverage = set()
+    for i in range(y-1, -1, -1):
+        left = max(0, x - (y - i))
+        right = min(N - 1, x + (y - i))
+        for j in range(left, right + 1):
+            if sight_map[j][i]:
+                for idx in range(len(warrior)):
+                    if warrior[idx] == (j, i):
+                        coverage.add(idx)
+
+    if len(stone) < len(coverage):
+        stone = coverage
+        output = sight_map
+    ########################
+    sight_map = [[0 for _ in range(N)] for _ in range(N)]
+
+    for i in range(y+1, N):
+        left = max(x - (y - i), 0)
+        right = min(N-1, x + (y-i))
+        for j in range(left, right + 1):
+            sight_map[j][i] = 1
+
+    thereis = False
+    for i in range(y+1, N):
+        if thereis:
+            sight_map[x][i] = 0
+        else:
+            sight_map[x][i] = 1
+
+        if (x, i) in warrior:
+            thereis = True
+
+    for i in range(y+1, N-1):
+        left = max(x - (i-y), 0)
+        right = min(N-1, x + (i-y))
+
+        for j in range(left, x):
+            if not sight_map[j][i] or (j, i) in warrior:
+                
+                if j > 0:
+                    sight_map[j-1][i+1] = 0
+                
+                sight_map[j][i+1] = 0
+
+        for j in range(x + 1, right + 1):
+            if not sight_map[j][i] or (j, i) in warrior:
+
+                if j < n - 1:
+                    sight_map[j+1][i+1] = 0
+
+                sight_map[j][i+1] = 0
+
+    coverage = set()
+    for i in range(y + 1, N):
+        left = max(0, x - (i - y))
+        right = min(N - 1, x + (i - y))
+        for j in range(left, right + 1):
+            if sight_map[j][i]:
+                for idx in range(len(warrior)):
+                    if warrior[idx] == (j, i):
+                        coverage.add(idx)
+
+    if len(stone) < len(coverage):
+        stone = coverage
+        output = sight_map
+
+    return output, stone
+
+# def stone_area(start, warrior, waypoint):
+#     output_view = set()
+#     max_stoned = set()
+#     for d in range(len(waypoint)-1, -1, -1):
+#         tovisit = deque([(start, -1)])
+#         visited = set()
+#         stoned = set()
+#         nogo = set()
+#         while tovisit:
+#             curr, idv = tovisit.popleft()
+#             # visited.add(curr)
+#             nowarrior = True
+#             for i in range(len(warrior)):
+#                 if curr == warrior[i]:
+#                     stoned.add(i)
+#                     nowarrior = False
+#             if nowarrior:
+#                 if idv == -1:
+#                     for idx, way in enumerate(waypoint[d]):
+#                         nx = curr[0] + way[0]
+#                         ny = curr[1] + way[1]
+#                         if check((nx, ny)) and (nx, ny) not in tovisit:
+#                             tovisit.append(((nx, ny), idx))
+#                             visited.add((nx, ny))
+#                 elif idv == 0:
+#                     for idx, way in enumerate(waypoint[d][:2]):
+#                         nx = curr[0] + way[0]
+#                         ny = curr[1] + way[1]
+#                         if check((nx, ny)) and (nx, ny) not in tovisit:
+#                             tovisit.append(((nx, ny), idv))
+#                             visited.add((nx, ny))
+#                 elif idv == 1:
+#                     for idx, way in enumerate([waypoint[d][1]]):
+#                         nx = curr[0] + way[0]
+#                         ny = curr[1] + way[1]
+#                         if check((nx, ny)) and (nx, ny) not in tovisit:
+#                             tovisit.append(((nx, ny), idv))
+#                             visited.add((nx, ny))
+#                 elif idv == 2:
+#                     for idx, way in enumerate(waypoint[d][1:]):
+#                         nx = curr[0] + way[0]
+#                         ny = curr[1] + way[1]
+#                         if check((nx, ny)) and (nx, ny) not in tovisit:
+#                             tovisit.append(((nx, ny), idv))
+#                             visited.add((nx, ny))
+#             else:
+#                 if idv == 0:
+#                     output = killall(curr, waypoint[d][:2])
+#                     nogo = nogo|output
+#                 elif idv == 1:
+#                     output = killall(curr, [waypoint[d][1]])
+#                     nogo = nogo|output
+#                 else:
+#                     output = killall(curr, waypoint[d][1:])
+#                     nogo = nogo|output
+
+#         # visited.remove(start)
+#         for i in range(len(warrior)):
+#             if i in stoned and warrior[i] in nogo:
+#                 stoned.remove(i)
+#         visited -= nogo
+#         if len(max_stoned) <= len(stoned):
+#             output_view = visited
+#             max_stoned = stoned
     
-    return output_view, max_stoned
+#     return output_view, max_stoned
 
 
 def killall(start, waypoint):
     tovisit = deque([start])
-    visited = set(start)
+    visited = set()
     while tovisit:
         curr = tovisit.popleft()
         visited.add(curr)
@@ -140,7 +354,6 @@ def killall(start, waypoint):
             if check((nx, ny)) and (nx, ny) not in visited:
                 tovisit.append((nx, ny))
                 visited.add((nx, ny))
-    visited.remove(start)
     return visited
 
 # setting
@@ -186,13 +399,13 @@ else:
                 status.pop(i)
 
 
-
         # 시선 (상하좌우, 90도 시야각)
         if len(warrior) > 0: 
-            area, stone = stone_area((sr, sc), warrior, [[(-1, -1), (-1, 0), (-1, 1)], [(1, -1), (1, 0), (1, 1)], [(1, -1), (0, -1), (-1, -1)], [(1, 1), (0, 1), (-1, 1)]])
+            area, stone = stone_area((sr, sc), warrior)
             for idx in stone:
                 status[idx] = 0
                 stoned += 1
+
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
             poped = False
