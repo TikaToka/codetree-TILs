@@ -115,7 +115,7 @@ def stone_area(start, warrior):
 
     if len(stone) < len(coverage):
         stone = coverage
-        output = sight_map
+        output = sight_map[:]
 ###########################################
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
@@ -166,7 +166,7 @@ def stone_area(start, warrior):
 
     if len(stone) < len(coverage):
         stone = coverage
-        output = sight_map
+        output = sight_map[:]
     ########################
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
@@ -218,7 +218,7 @@ def stone_area(start, warrior):
 
     if len(stone) < len(coverage):
         stone = coverage
-        output = sight_map
+        output = sight_map[:]
     ########################
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
@@ -270,7 +270,7 @@ def stone_area(start, warrior):
 
     if len(stone) < len(coverage):
         stone = coverage
-        output = sight_map
+        output = sight_map[:]
 
     return output, stone
 
