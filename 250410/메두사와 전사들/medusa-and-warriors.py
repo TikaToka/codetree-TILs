@@ -87,13 +87,12 @@ def stone_area(start, warrior):
         right = min(N-1, y + (x - i))
         for j in range(left, y):
             if not sight_map[i][j] or (i, j) in warrior:
-                
                 if j > 0:
                     sight_map[i-1][j-1] = 0
                 
                 sight_map[i-1][j] = 0
+        for j in range(y+1, right+1):
 
-        for j in range(y+1, right):
             if not sight_map[i][j] or (i, j) in warrior:
 
                 if j < n - 1:
@@ -401,7 +400,7 @@ else:
             for idx in stone:
                 status[idx] = 0
                 stoned += 1
-        
+
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
             if status[i]:
