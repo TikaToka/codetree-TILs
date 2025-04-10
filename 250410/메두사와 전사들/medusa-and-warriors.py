@@ -408,7 +408,7 @@ else:
 
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
-            # poped = False
+            poped = False
             if status[i]:
                 temp = bfs_warrior1(board, warrior[i], (sr, sc), area)
                 if temp != None:
