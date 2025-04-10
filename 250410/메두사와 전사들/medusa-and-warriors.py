@@ -19,7 +19,7 @@ def bfs(board, start, end):
         for d in range(4):
             nx = x + dx[d]
             ny = y + dy[d]
-            if check((nx, ny)) and (nx, ny) not in visited and (board[nx][ny] == 0 or (nx, ny) == (er, ec)): # 
+            if check((nx, ny)) and (nx, ny) not in visited and board[nx][ny] != 1: # 
                 tovisit.append(((nx, ny), path + [(nx, ny)]))
                 visited.add((nx, ny))
     return []
@@ -34,13 +34,13 @@ def bfs_warrior1(board, start, end, area):
     (x, y) = start
     cand = None
     dist = distance(start, end)
-    for d in range(3, -1, -1):
+    for d in range(4):
         nx = x + dx[d]
         ny = y + dy[d]
         if check((nx, ny)) and area[nx][ny] != 1:
-            if distance((nx, ny), end) <= dist:
-                dist = distance((nx,ny), end)
+            if distance((nx, ny), end) < dist:
                 cand = (nx, ny)
+                break
     return cand
 
 
@@ -50,13 +50,13 @@ def bfs_warrior2(board, start, end, area):
     (x, y) = start
     cand = None
     dist = distance(start, end)
-    for d in range(3, -1, -1):
+    for d in range(4):
         nx = x + dx[d]
         ny = y + dy[d]
         if check((nx, ny)) and area[nx][ny] != 1:
-            if distance((nx, ny), end) <= dist:
-                dist = distance((nx,ny), end)
+            if distance((nx, ny), end) < dist:
                 cand = (nx, ny)
+                break
     return cand
 
 
@@ -387,7 +387,6 @@ else:
         
         # 메두사 이동 (메두사가 이동한 칸에 전사가 았으면 사라짐. 최단경로 상 하 좌 우, 경로가 없을수도)
         (sr, sc) = route[cnt]
-
         # 도착 확인
         if (sr, sc) == (er, ec):
             print(0)
@@ -405,10 +404,9 @@ else:
             for idx in stone:
                 status[idx] = 0
                 stoned += 1
-
+        
         # 전사들의 이동 상하좌우
         for i in range(len(warrior)-1, -1, -1):
-            poped = False
             if status[i]:
                 temp = bfs_warrior1(board, warrior[i], (sr, sc), area)
                 if temp != None:
@@ -417,12 +415,13 @@ else:
                         attack += 1
                         warrior.pop(i)
                         status.pop(i)
-                        poped =True
                     else:
                         warrior[i] = temp
                     movement += 1
-            if not poped:
-                if status[i]:
+
+        # 전사들의 이동 좌우상하
+        for i in range(len(warrior)-1, -1, -1):
+            if status[i]:
                     temp = bfs_warrior2(board, warrior[i], (sr, sc), area)
                     if temp != None:
                         # 겹치면 공격 ㄱㄱ
@@ -433,19 +432,6 @@ else:
                         else:
                             warrior[i] = temp
                         movement += 1
-        # # 전사들의 이동 좌우상하
-        # for i in range(len(warrior)-1, -1, -1):
-        #     if status[i]:
-        #             temp = bfs_warrior2(board, warrior[i], (sr, sc), area)
-        #             if temp != None:
-        #                 # 겹치면 공격 ㄱㄱ
-        #                 if temp == (sr, sc):
-        #                     attack += 1
-        #                     warrior.pop(i)
-        #                     status.pop(i)
-        #                 else:
-        #                     warrior[i] = temp
-        #                 movement += 1
         # # 전사들의 공격 (같은 칸에 메두사 있으면 공격 후 전사 사라짐)
         # for m in range(len(warrior)-1, -1, -1):
         #     if warrior[m] == (sr, sc):
