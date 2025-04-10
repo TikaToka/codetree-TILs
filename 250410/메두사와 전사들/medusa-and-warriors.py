@@ -61,8 +61,6 @@ def bfs_warrior2(board, start, end, area):
 
 
 def stone_area(start, warrior):
-    stone = set()
-    output = None
     N = n
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
@@ -112,10 +110,9 @@ def stone_area(start, warrior):
                 for idx in range(len(warrior)):
                     if warrior[idx] == (i, j):
                         coverage.add(idx)
+    stone = coverage
+    output = sight_map[:]
 
-    if len(stone) < len(coverage):
-        stone = coverage
-        output = sight_map[:]
 ###########################################
     sight_map = [[0 for _ in range(N)] for _ in range(N)]
 
