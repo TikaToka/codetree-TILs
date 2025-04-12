@@ -190,26 +190,28 @@ while cnt < len(route3d):
     current = route3d[cnt]
     cnt += 1
     answer += 1
-# 3d to 2d
-for fi in fire:
-    if cnt % fi[3] == 0:
-        d = fi[2]
-        nx = fi[0] + dx[d]
-        ny = fi[1] + dy[d]
-        if check((nx, ny), n) and board2d[nx][ny] not in [1, 4]:
-            board2d[nx][ny] = -1
-            fire[0] = nx
-            fire[1] = ny
-
-if board2d[ex2d][ey2d] == -1:
-    print(-1)
-    fail = True
-
-current = (ex2d, ey2d)
-cnt += 1
-answer += 1
-
+    
 if not fail:
+    # 3d to 2d
+    for fi in fire:
+        if cnt % fi[3] == 0:
+            d = fi[2]
+            nx = fi[0] + dx[d]
+            ny = fi[1] + dy[d]
+            if check((nx, ny), n) and board2d[nx][ny] not in [1, 4]:
+                board2d[nx][ny] = -1
+                fire[0] = nx
+                fire[1] = ny
+    
+    if board2d[ex2d][ey2d] == -1:
+        print(-1)
+        fail = True
+    
+    current = (ex2d, ey2d)
+    cnt += 1
+    answer += 1
+
+
     done = False
 
     board2d_bkup = board2d[:]
