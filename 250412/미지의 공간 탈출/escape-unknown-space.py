@@ -200,8 +200,8 @@ if not fail:
             ny = fi[1] + dy[d]
             if check((nx, ny), n) and board2d[nx][ny] not in [1, 4]:
                 board2d[nx][ny] = -1
-                fire[0] = nx
-                fire[1] = ny
+                fi[0] = nx
+                fi[1] = ny
 
     if board2d[ex2d][ey2d] == -1:
         print(-1)
@@ -214,10 +214,10 @@ if not fail:
 
     done = False
 
-    board2d_bkup = board2d[:]
+    board2d_bkup = [x[:] for x in board2d]
     cnt_bkup = cnt
     answer_bkup = answer
-    fire_bkup = fire
+    fire_bkup = [x[:] for x in fire]
 
     failed = False
 
