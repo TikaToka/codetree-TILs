@@ -80,7 +80,7 @@ def find2dexit():
             if board2d[i][j] == 3:
                 for d in range(4):
                     nx = i + dx[d]
-                    ny = j + dx[d]
+                    ny = j + dy[d]
                     if check((nx, ny), n) and board2d[nx][ny] == 0:
                         return (nx, ny)
 
@@ -104,6 +104,7 @@ start = ()
 goal = ()
 edge = ()
 answer = 0
+fail = False
 
 board2d = [[0 for _ in range(n)] for _ in range(n)]
 for i in range(n):
@@ -117,6 +118,7 @@ for i in range(n):
                 edge = (i, j)
 
 (ex2d, ey2d)= find2dexit()
+
 (ex3d, ey3d) = exitto3d((ex2d, ey2d))
 
 board3d = [[0 for _ in range(3*m)] for _ in range(3*m)]
@@ -169,7 +171,6 @@ route3d = bfs3d(start, (ex3d, ey3d))
 
 cnt = 1
 #3d 탈출 전
-fail = False
 while cnt < len(route3d):
     # 확신 (독립적)
     for fi in fire:
@@ -183,7 +184,6 @@ while cnt < len(route3d):
                 fi[1] = ny
 
     if board2d[ex2d][ey2d] == -1:
-        print(-1)
         fail = True
         break
     # 이동
@@ -260,3 +260,5 @@ if not fail:
         print(-1)
     else:
         print(answer)
+else:
+    print(-1)
