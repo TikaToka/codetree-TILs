@@ -190,7 +190,7 @@ while cnt < len(route3d):
     current = route3d[cnt]
     cnt += 1
     answer += 1
-    
+
 if not fail:
     # 3d to 2d
     for fi in fire:
@@ -202,11 +202,11 @@ if not fail:
                 board2d[nx][ny] = -1
                 fire[0] = nx
                 fire[1] = ny
-    
+
     if board2d[ex2d][ey2d] == -1:
         print(-1)
         fail = True
-    
+
     current = (ex2d, ey2d)
     cnt += 1
     answer += 1
@@ -219,9 +219,14 @@ if not fail:
     answer_bkup = answer
     fire_bkup = fire
 
+    failed = False
+
     while not done:
         current = (ex2d, ey2d)
         route2d = bfs2d((ex2d, ey2d), goal)
+        if not route2d:
+            failed = True
+            break
         board2d = board2d_bkup
         cnt = cnt_bkup
         fire = fire_bkup
@@ -251,4 +256,7 @@ if not fail:
                 break
             cnt += 1
             mv += 1
-    print(answer)
+    if failed:
+        print(-1)
+    else:
+        print(answer)
